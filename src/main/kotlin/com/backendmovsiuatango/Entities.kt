@@ -125,10 +125,10 @@ data class Ticket(
     var ticketUser: Set<User>,
 
    @ManyToOne
-    var ticketReason: List<Ticket_Reason>,
+    var ticketReason: List<TicketReason>,
 
     @ManyToOne
-    var ticketAsset: List<asset_type>,
+    var ticketAsset: List<AssetType>,
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -150,7 +150,7 @@ data class Ticket(
 
 @Entity
 @Table(name = "ticket_reason")
-data class Ticket_Reason(
+data class TicketReason(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
@@ -162,7 +162,7 @@ data class Ticket_Reason(
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is Ticket_Reason) return false
+        if (other !is TicketReason) return false
 
         if (id != other.id) return false
 
@@ -178,3 +178,32 @@ data class Ticket_Reason(
     }
 }
 
+@Entity
+@Table(name = "asset_type")
+data class AssetType(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
+
+    @Column(name = "name")
+    var assetName: String? = null,
+
+    //Entity relationships
+){
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is AssetType) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+
+    override fun toString(): String {
+        return "User(id=$id, name=$assetName)"
+    }
+}
