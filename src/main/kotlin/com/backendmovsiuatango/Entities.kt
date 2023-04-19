@@ -1,23 +1,73 @@
 package com.backendmovsiuatango
 
+import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 data class User(
     @Id
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
 
-    @Column(name = "name")
-    var name: String,
+    @Column(name = "firstName")
+    var firstName:  String? = null,
+
+    @Column(name = "lastName")
+    var lastName: String? = null,
 
     @Column(name = "password")
-    var password: String,
+    var password:  String? = null,
+
+    @Column(name = "email")
+    var email: String? = null,
 
     @Column(name = "rol")
-    var rol: String,
+    var rol:  String? = null,
+
+    @Column(name = "createDate")
+    var createDate: Date? = null,
+
+    @Column(name = "enabled")
+    var enabled: Boolean,
+
+    @Column(name = "tokenExpired")
+    var tokenExpired: Boolean? = null,
 
     //Entity relationship
-)
+
+    @OneToMany(mappedBy = "user")      //ONE TO MANY
+    var taskList: List<Task>? = null,  //falta crear Task
+
+    @ManyToMany                        //MANY TO MANY
+    @JoinTable(
+        name = "user_role",
+        joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
+        inverseJoinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")]
+    )
+    var roleList: Set<Role>? = null, // falta crear Role
+
+){
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is User) return false
+
+        if (id != other.id) return false
+        if (email != other.email) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + email.hashCode()
+        return result
+    }
+
+    override fun toString(): String {
+        return "User(id=$id, firstName='$firstName', lastName='$lastName', password='$password', email='$email', createDate=$createDate, enabled=$enabled, tokenExpired=$tokenExpired, taskList=$taskList, roleList=$roleList)"
+    }
+
+}
+}
