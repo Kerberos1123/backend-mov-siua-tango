@@ -1,5 +1,6 @@
 package com.backendmovsiuatango
 
+import org.hibernate.annotations.CascadeType
 import java.util.*
 import javax.persistence.*
 
@@ -33,13 +34,19 @@ data class User(
     var enabled: Boolean,
 
     //Entity relationship
-    @ManyToOne                       //MANY TO MANY
+    @ManyToMany                       //MANY TO MANY
     @JoinTable(
         name = "user_role",
         joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
         inverseJoinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")]
     )
-    var roleList: List<Role>  // falta crear Role
+    var roleUser: Set<Role>,
+
+    @OneToMany(mappedBy = "users")
+    var tickets: List<Ticket>,
+
+    @OneToMany(mappedBy = "users")
+    var requests: List<Request>,
 
 ){
     override fun equals(other: Any?): Boolean {
@@ -59,7 +66,7 @@ data class User(
     }
 
     override fun toString(): String {
-        return "User(id=$id, firstName='$firstName', lastName='$lastName', password='$password', email='$email', createDate=$createDate, enabled=$enabled, roleList=$roleList)"
+        return "User(id=$id, firstName='$firstName', lastName='$lastName', password='$password', email='$email', createDate=$createDate, enabled=$enabled, roleUser=$roleUser)"
     }
 
 }
@@ -75,13 +82,8 @@ data class Role(
     var roleName: String? = null,
 
     //Entity relationship
-    @OneToMany
-    @JoinTable(
-        name = "user_role",
-        joinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")],
-        inverseJoinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")]
-    )
-    var userList: List<User>,
+    @ManyToMany(mappedBy = "roleUser")
+    var roles: Set<User>,
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -109,26 +111,29 @@ data class Ticket(
     var id: Long? = null,
 
     @Column(name = "user_id")
-    var user_id: Long? = null,
+    var userId: Long? = null,
 
     @Column(name = "asset_type_id")
-    var asset_type_id: Long? = null,
+    var assetTypeId: Long? = null,
 
     @Column(name = "ticket_reason_id")
-    var ticket_reason_id: Long? = null,
+    var ticketReasonId: Long? = null,
 
     @Column(name = "detail")
     var detail: String? = null,
 
     //Entity relationships
-    @ManyToMany
-    var ticketUser: Set<User>,
-
-   @ManyToOne
-    var ticketReason: List<TicketReason>,
-
     @ManyToOne
-    var ticketAsset: List<AssetType>,
+    @JoinColumn(name = "ticket_id")
+    var ticket: Ticket,
+
+    @OneToOne
+    @JoinColumn(name = "asset_type_id", referencedColumnName = "id")
+    var assetType: AssetType,
+
+    @OneToOne
+    @JoinColumn(name = "ticket_reason_id", referencedColumnName = "id")
+    var ticketReason: TicketReason,
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -144,7 +149,7 @@ data class Ticket(
     }
 
     override fun toString(): String {
-        return "User(id=$id, user_id=$user_id, asset_type_id=$asset_type_id, ticket_reason_id:$ticket_reason_id, detail=$detail)"
+        return "User(id=$id, user_id=$userId, asset_type_id=$assetTypeId, ticket_reason_id:$ticketReasonId, detail=$detail)"
     }
 }
 
@@ -159,6 +164,8 @@ data class TicketReason(
     var reasonName: String? = null,
 
     //Entity relationships
+    @OneToOne(mappedBy = "ticket_reason")
+    var ticket: Ticket,
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -189,6 +196,8 @@ data class AssetType(
     var assetName: String? = null,
 
     //Entity relationships
+    @OneToOne(mappedBy = "asset_type")
+    var ticket: Ticket,
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -216,18 +225,36 @@ data class Request(
     var id: Long? = null,
 
     @Column(name = "asset_id")
-    var asset_id: Long? = null,
+    var assetId: Long? = null,
 
     @Column(name = "user_id")
-    var user_id: Long? = null,
+    var userId: Long? = null,
 
     @Column(name = "date_hour")
-    var date_hour: Date? = null,
+    var dateHour: Date? = null,
 
     @Column(name = "state_id")
-    var state_id: Long? = null,
+    var stateId: Long? = null,
 
     //Entity relationships
+   /* @OneToOne
+    @JoinColumn(name = "asset_id", referencedColumnName = "id")
+    var assets: Asset,*///crear entity Asset
+
+  /*  @OneToOne(mappedBy = "asset")
+    var request: Request,*/ //cortar y pegar esto en Asset
+
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable = false)
+    var ticket: Ticket,
+
+    /*OneToOne
+    @JoinColumn(name = "state_id", referencedColumnName = "id")
+    var state: State,*/ //crear entity State
+
+   /* @OneToOne(mappedBy = "state")
+    var request: Request,*/ //cortar y pegar esto en State
+
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -243,6 +270,6 @@ data class Request(
     }
 
     override fun toString(): String {
-        return "User(id=$id, asset_id=$asset_id, user_id=$user_id, date_hour=$date_hour, state_id=$state_id)"
+        return "User(id=$id, asset_id=$assetId, user_id=$userId, date_hour=$dateHour, state_id=$stateId)"
     }
 }
