@@ -85,7 +85,7 @@ data class Role(
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is User) return false
+        if (other !is Role) return false
 
         if (id != other.id) return false
 
@@ -100,3 +100,81 @@ data class Role(
         return "User(id=$id, name='$roleName)"
     }
 }
+
+@Entity
+@Table(name = "ticket")
+data class Ticket(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
+
+    @Column(name = "user_id")
+    var user_id: Long? = null,
+
+    @Column(name = "asset_type_id")
+    var asset_type_id: Long? = null,
+
+    @Column(name = "ticket_reason_id")
+    var ticket_reason_id: Long? = null,
+
+    @Column(name = "detail")
+    var detail: String? = null,
+
+    //Entity relationships
+    @ManyToMany
+    var ticketUser: Set<User>,
+
+   @ManyToOne
+    var ticketReason: List<Ticket_Reason>,
+
+    @ManyToOne
+    var ticketAsset: List<asset_type>,
+){
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Ticket) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+
+    override fun toString(): String {
+        return "User(id=$id, user_id=$user_id, asset_type_id=$asset_type_id, ticket_reason_id:$ticket_reason_id, detail=$detail)"
+    }
+}
+
+@Entity
+@Table(name = "ticket_reason")
+data class Ticket_Reason(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
+
+    @Column(name = "name")
+    var reasonName: String? = null,
+
+    //Entity relationships
+){
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Ticket_Reason) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+
+    override fun toString(): String {
+        return "User(id=$id, name=$reasonName)"
+    }
+}
+
