@@ -32,21 +32,14 @@ data class User(
     @Column(name = "enabled")
     var enabled: Boolean,
 
-    @Column(name = "tokenExpired")
-    var tokenExpired: Boolean? = null,
-
     //Entity relationship
-
-    @OneToMany(mappedBy = "user")      //ONE TO MANY
-    var taskList: List<Task>? = null,  //falta crear Task
-
-    @ManyToMany                        //MANY TO MANY
+    @ManyToOne                       //MANY TO MANY
     @JoinTable(
         name = "user_role",
         joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
         inverseJoinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")]
     )
-    var roleList: Set<Role>? = null, // falta crear Role
+    var roleList: List<Role>  // falta crear Role
 
 ){
     override fun equals(other: Any?): Boolean {
@@ -66,8 +59,44 @@ data class User(
     }
 
     override fun toString(): String {
-        return "User(id=$id, firstName='$firstName', lastName='$lastName', password='$password', email='$email', createDate=$createDate, enabled=$enabled, tokenExpired=$tokenExpired, taskList=$taskList, roleList=$roleList)"
+        return "User(id=$id, firstName='$firstName', lastName='$lastName', password='$password', email='$email', createDate=$createDate, enabled=$enabled, roleList=$roleList)"
     }
 
 }
+
+@Entity
+@Table(name="role")
+data class Role(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
+
+    @Column(name = "name")
+    var roleName: String? = null,
+
+    //Entity relationship
+    @OneToMany
+    @JoinTable(
+        name = "user_role",
+        joinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")],
+        inverseJoinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")]
+    )
+    var userList: List<User>,
+){
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is User) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+
+    override fun toString(): String {
+        return "User(id=$id, name='$roleName)"
+    }
 }
