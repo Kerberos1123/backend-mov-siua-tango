@@ -207,3 +207,42 @@ data class AssetType(
         return "User(id=$id, name=$assetName)"
     }
 }
+
+@Entity
+@Table(name = "request")
+data class Request(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
+
+    @Column(name = "asset_id")
+    var asset_id: Long? = null,
+
+    @Column(name = "user_id")
+    var user_id: Long? = null,
+
+    @Column(name = "date_hour")
+    var date_hour: Date? = null,
+
+    @Column(name = "state_id")
+    var state_id: Long? = null,
+
+    //Entity relationships
+){
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Request) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+
+    override fun toString(): String {
+        return "User(id=$id, asset_id=$asset_id, user_id=$user_id, date_hour=$date_hour, state_id=$state_id)"
+    }
+}
