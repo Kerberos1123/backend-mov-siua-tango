@@ -1,6 +1,5 @@
 package com.backendmovsiuatango
 
-import org.hibernate.annotations.CascadeType
 import java.util.*
 import javax.persistence.*
 
@@ -70,6 +69,39 @@ data class User(
     }
 
 }
+
+@Entity
+@Table(name = "privilege")
+data class Privilege(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
+    var name: String,
+    // Entity Relationship
+    @ManyToMany(mappedBy = "roleList", fetch = FetchType.LAZY)
+    var userList: Set<User>,
+    @ManyToMany(mappedBy = "privilegeList", fetch = FetchType.LAZY)
+    var roleList: Set<Role>
+){
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Privilege) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id?.hashCode() ?: 0
+    }
+
+    override fun toString(): String {
+        return "Privilege(id=$id, name='$name', userList=$userList, roleList=$roleList)"
+    }
+}
+
+
 
 @Entity
 @Table(name="role")
