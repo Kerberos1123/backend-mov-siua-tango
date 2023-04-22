@@ -236,6 +236,10 @@ data class Asset(
     //Entity relationships
     @OneToOne(mappedBy = "asset")
     var request: Request,
+
+    @OneToOne
+    @JoinColumn(name = "asset_type_id", referencedColumnName = "id")
+    var assetType: AssetType,
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -268,6 +272,9 @@ data class AssetType(
     //Entity relationships
     @OneToOne(mappedBy = "asset_type")
     var ticket: Ticket,
+
+    @OneToOne(mappedBy = "asset_type")
+    var asset: Asset,
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
