@@ -218,6 +218,44 @@ data class TicketReason(
 }
 
 @Entity
+@Table(name = "asset")
+data class Asset(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
+
+    @Column(name = "name")
+    var assetName: String? = null,
+
+    @Column(name = "asset_type_id")
+    var assetTypeId: Long? = null,
+
+    @Column(name = "available")
+    var available: Boolean,
+
+    //Entity relationships
+    @OneToOne(mappedBy = "asset")
+    var request: Request,
+){
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is AssetType) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+
+    override fun toString(): String {
+        return "User(id=$id, name=$assetName, asset_type_id=$assetTypeId, available=$available)"
+    }
+}
+
+@Entity
 @Table(name = "asset_type")
 data class AssetType(
     @Id
@@ -225,7 +263,7 @@ data class AssetType(
     var id: Long? = null,
 
     @Column(name = "name")
-    var assetName: String? = null,
+    var assetTypeName: String? = null,
 
     //Entity relationships
     @OneToOne(mappedBy = "asset_type")
@@ -245,7 +283,39 @@ data class AssetType(
     }
 
     override fun toString(): String {
-        return "User(id=$id, name=$assetName)"
+        return "User(id=$id, name=$assetTypeName)"
+    }
+}
+
+@Entity
+@Table(name = "state")
+data class State(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
+
+    @Column(name = "name")
+    var stateName: String? = null,
+
+    //Entity relationships
+    @OneToOne(mappedBy = "state")
+    var request: Request,
+){
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Request) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+
+    override fun toString(): String {
+        return "User(id=$id, name=$stateName)"
     }
 }
 
@@ -259,6 +329,9 @@ data class Request(
     @Column(name = "asset_id")
     var assetId: Long? = null,
 
+    @Column(name = "classroom_id")
+    var classroomId: Long? = null,
+
     @Column(name = "user_id")
     var userId: Long? = null,
 
@@ -269,24 +342,17 @@ data class Request(
     var stateId: Long? = null,
 
     //Entity relationships
-   /* @OneToOne
+   @OneToOne
     @JoinColumn(name = "asset_id", referencedColumnName = "id")
-    var assets: Asset,*///crear entity Asset
-
-  /*  @OneToOne(mappedBy = "asset")
-    var request: Request,*/ //cortar y pegar esto en Asset
+    var assets: Asset,
 
     @ManyToOne
     @JoinColumn(name="user_id", nullable = false)
     var ticket: Ticket,
 
-    /*OneToOne
+    @OneToOne
     @JoinColumn(name = "state_id", referencedColumnName = "id")
-    var state: State,*/ //crear entity State
-
-   /* @OneToOne(mappedBy = "state")
-    var request: Request,*/ //cortar y pegar esto en State
-
+    var state: State,
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
