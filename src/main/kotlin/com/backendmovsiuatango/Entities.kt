@@ -305,3 +305,26 @@ data class Request(
         return "User(id=$id, asset_id=$assetId, user_id=$userId, date_hour=$dateHour, state_id=$stateId)"
     }
 }
+
+@Entity
+@Table(name="classroom")
+data class Classroom(
+        @Id
+        @GeneratedValue(strategy = GenerationType.AUTO)
+        var id: Long? = null,
+
+        @Column(name = "name")
+        var className: String? = null,
+
+        @Column(name = "reserved_hours")
+        var reservedHours: Int? = null,
+){
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+
+    override fun toString(): String {
+        return "Classroom(id='$id', name='$className', reserved_hours= '$reservedHours')"
+    }
+}
