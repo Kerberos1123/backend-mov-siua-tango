@@ -1,5 +1,6 @@
 package com.backendmovsiuatango
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import java.util.*
 import javax.persistence.*
 
@@ -101,6 +102,109 @@ data class Privilege(
     }
 }
 
+@Entity
+@Table(name = "status")
+data class Status(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
+    var label: String? = null,
+    // Entity Relationship
+    @OneToMany(mappedBy = "status")
+    var taskList: List<Task>? = null,
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Status) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id?.hashCode() ?: 0
+    }
+
+    override fun toString(): String {
+        return "Status(id=$id, label='$label', taskList=$taskList)"
+    }
+
+}
+
+@Entity
+@Table(name = "task")
+data class Task(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
+    var title: String,
+    var notes: String,
+    @Temporal(TemporalType.DATE)
+    var createDate: Date,
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="dd/MM/yyyy")
+    var dueDate: Date,
+
+    // Entity Relationship
+    @ManyToOne
+    @JoinColumn(name = "priority_id", nullable = false, referencedColumnName = "id")
+    var priority: Priority,
+    @ManyToOne
+    @JoinColumn(name = "status_id", nullable = false, referencedColumnName = "id")
+    var status: Status? = null,
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+    var user: User? = null,
+
+    ) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Task) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id?.hashCode() ?: 0
+    }
+
+    override fun toString(): String {
+        return "Task(id=$id, title='$title', notes='$notes', createDate=$createDate, dueDate=$dueDate, priority=$priority, status=$status, user=$user)"
+    }
+
+}
+
+@Entity
+@Table(name = "priority")
+data class Priority(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
+    var label: String? = null,
+    // Entity Relationship
+    @OneToMany(mappedBy = "priority")
+    var taskList: List<Task>? = null,
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Priority) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id?.hashCode() ?: 0
+    }
+
+    override fun toString(): String {
+        return "Priority(label='$label', taskList=$taskList, id=$id)"
+    }
+}
 
 
 @Entity
@@ -472,6 +576,6 @@ data class Classroom(
 ){
 
     override fun toString(): String {
-        return "Classroom(id='$id', name='$className', status= '$classroomStatus')"
+        return "Classroom(id='$id', name='$classroomName', status= '$classroomStatus')"
     }
 }
