@@ -1,9 +1,8 @@
 package com.backendmovsiuatango
 
-import net.bytebuddy.build.Plugin.Factory.UsingReflection.Priority
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
-import org.springframework.scheduling.config.Task
 import org.springframework.stereotype.Repository
 import java.util.*
 
@@ -12,10 +11,7 @@ import java.util.*
 interface PriorityRepository: JpaRepository<Priority, Long>
 
 @Repository
-interface TaskRepository:JpaRepository< Task,Long>{
-
-    fun findAllByDueDateIs(dueDate:Date) : List<Task>?
-}
+interface TaskRepository : JpaRepository<Task, Long>
 
 @Repository
 interface RoleRepository : JpaRepository<Role, Long> {
