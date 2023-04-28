@@ -5,117 +5,21 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(name = "users")
-data class User(
-    @Id
-
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null,
-
-    @Column(name = "firstName")
-    var firstName:  String? = null,
-
-    @Column(name = "lastName")
-    var lastName: String? = null,
-
-    @Column(name = "password")
-    var password:  String? = null,
-
-    @Column(name = "email")
-    var email: String? = null,
-
-    @Column(name = "rol")
-    var rol:  String? = null,
-
-    @Column(name = "createDate")
-    var createDate: Date? = null,
-
-    @Column(name = "enabled")
-    var enabled: Boolean,
-
-    //Entity relationship
-    @ManyToMany                       //MANY TO MANY
-    @JoinTable(
-        name = "user_role",
-        joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
-        inverseJoinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")]
-    )
-    var roleUser: Set<Role>,
-
-    @OneToMany(mappedBy = "users")
-    var tickets: List<Ticket>,
-
-    @OneToMany(mappedBy = "users")
-    var requests: List<Request>,
-
-){
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is User) return false
-
-        if (id != other.id) return false
-        if (email != other.email) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = id?.hashCode() ?: 0
-        result = 31 * result + email.hashCode()
-        return result
-    }
-
-    override fun toString(): String {
-        return "User(id=$id, firstName='$firstName', lastName='$lastName', password='$password', email='$email', createDate=$createDate, enabled=$enabled, roleUser=$roleUser)"
-    }
-
-}
-
-@Entity
-@Table(name = "privilege")
-data class Privilege(
+@Table(name = "reminder")
+data class Reminder(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
-    var name: String,
+    @Column(name = "reminder_date")
+    var reminderDate: Date,
     // Entity Relationship
-    @ManyToMany(mappedBy = "roleList", fetch = FetchType.LAZY)
-    var userList: Set<User>,
-    @ManyToMany(mappedBy = "privilegeList", fetch = FetchType.LAZY)
-    var roleList: Set<Role>
-){
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is Privilege) return false
-
-        if (id != other.id) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return id?.hashCode() ?: 0
-    }
-
-    override fun toString(): String {
-        return "Privilege(id=$id, name='$name', userList=$userList, roleList=$roleList)"
-    }
-}
-
-@Entity
-@Table(name = "status")
-data class Status(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null,
-    var label: String? = null,
-    // Entity Relationship
-    @OneToMany(mappedBy = "status")
-    var taskList: List<Task>? = null,
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId // Share the same primary key between 2 tables
+    var task: Task,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is Status) return false
+        if (other !is Reminder) return false
 
         if (id != other.id) return false
 
@@ -127,7 +31,7 @@ data class Status(
     }
 
     override fun toString(): String {
-        return "Status(id=$id, label='$label', taskList=$taskList)"
+        return "Reminder(id=$id, reminderDate=$reminderDate, task=$task)"
     }
 
 }
@@ -147,12 +51,15 @@ data class Task(
     var dueDate: Date,
 
     // Entity Relationship
+
     @ManyToOne
     @JoinColumn(name = "priority_id", nullable = false, referencedColumnName = "id")
     var priority: Priority,
+
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false, referencedColumnName = "id")
     var status: Status? = null,
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
     var user: User? = null,
@@ -178,15 +85,124 @@ data class Task(
 }
 
 @Entity
+@Table(name = "status")
+data class Status(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
+    var label: String? = null,
+
+    // Entity Relationship
+
+    @OneToMany(mappedBy = "status")
+    var taskList: List<Task>? = null,
+
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Status) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id?.hashCode() ?: 0
+    }
+
+    override fun toString(): String {
+        return "Status(id=$id, label='$label', taskList=$taskList)"
+    }
+
+}
+
+@Entity
+@Table(name = "role")
+data class Role(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
+    var name: String,
+
+    // Entity Relationship
+
+    @ManyToMany
+    @JoinTable(
+        name = "role_privilege",
+        joinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")],
+        inverseJoinColumns = [JoinColumn(name = "privilege_id", referencedColumnName = "id")]
+    )
+    var privilegeList: Set<Privilege>,
+
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Role) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id?.hashCode() ?: 0
+    }
+
+    override fun toString(): String {
+        return "Role(id=$id, name='$name', privilegeList=$privilegeList)"
+    }
+
+}
+
+@Entity
+@Table(name = "privilege")
+data class Privilege(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
+    var name: String,
+
+    // Entity Relationship
+
+    @ManyToMany(mappedBy = "roleList", fetch = FetchType.LAZY)
+    var userList: Set<User>,
+
+    @ManyToMany(mappedBy = "privilegeList", fetch = FetchType.LAZY)
+    var roleList: Set<Role>,
+
+    ) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Privilege) return false
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id?.hashCode() ?: 0
+    }
+
+    override fun toString(): String {
+        return "Privilege(id=$id, name='$name', userList=$userList, roleList=$roleList)"
+    }
+}
+
+@Entity
 @Table(name = "priority")
 data class Priority(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
     var label: String? = null,
+
     // Entity Relationship
+
     @OneToMany(mappedBy = "priority")
     var taskList: List<Task>? = null,
+
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -207,38 +223,73 @@ data class Priority(
 }
 
 
+//-------------------------------------------------------------------- Entities nacho
+
 @Entity
-@Table(name="role")
-data class Role(
+@Table(name = "users")
+data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
+    var firstName: String? = null,
+    var lastName: String? = null,
+    var password: String? = null,
+    var email: String? = null,
+    var createDate: Date? = null,
+    var enabled: Boolean,
+    var tokenExpired: Boolean? = null,
 
-    @Column(name = "name")
-    var roleName: String? = null,
+    // Entity Relationship
 
-    //Entity relationship
-    @ManyToMany(mappedBy = "roleUser")
-    var roles: Set<User>,
-){
+
+    /*
+    //TICKETS DONE
+    @OneToMany(mappedBy = "user")
+    var tickets: List<Ticket>?,
+
+    //REQUESTS DONE
+    @OneToMany(mappedBy = "user")
+    var requests: List<Request>?,
+
+
+     */
+
+    @OneToMany(mappedBy = "user")
+    var taskList: List<Task>? = null,
+
+    @ManyToMany
+    @JoinTable(
+        name = "user_role",
+        joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
+        inverseJoinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")]
+    )
+    var roleList: Set<Role>? = null,
+
+    ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is Role) return false
+        if (other !is User) return false
 
         if (id != other.id) return false
+        if (email != other.email) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return super.hashCode()
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + email.hashCode()
+        return result
     }
 
     override fun toString(): String {
-        return "User(id=$id, name='$roleName)"
+        return "User(id=$id, firstName='$firstName', lastName='$lastName', password='$password', email='$email', createDate=$createDate, enabled=$enabled, tokenExpired=$tokenExpired, taskList=$taskList, roleList=$roleList)"
     }
+
 }
 
+
+/*
 @Entity
 @Table(name = "ticket")
 data class Ticket(
@@ -249,28 +300,32 @@ data class Ticket(
     @Column(name = "user_id")
     var userId: Long? = null,
 
-    @Column(name = "asset_type_id")
+    @Column(name = "asset_type_id") // explicitly specify the physical column name
     var assetTypeId: Long? = null,
 
     @Column(name = "ticket_reason_id")
     var ticketReasonId: Long? = null,
 
-    @Column(name = "detail")
     var detail: String? = null,
 
     //Entity relationships
-    @ManyToOne
-    @JoinColumn(name = "ticket_id")
-    var ticket: Ticket,
 
+    //USER DONE
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+    var user: User? = null,
+
+    //ASSETTYPE DONE
     @OneToOne
     @JoinColumn(name = "asset_type_id", referencedColumnName = "id")
     var assetType: AssetType,
 
+    //TICKETREASON DONE
     @OneToOne
     @JoinColumn(name = "ticket_reason_id", referencedColumnName = "id")
     var ticketReason: TicketReason,
-){
+
+    ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Ticket) return false
@@ -285,7 +340,7 @@ data class Ticket(
     }
 
     override fun toString(): String {
-        return "User(id=$id, user_id=$userId, asset_type_id=$assetTypeId, ticket_reason_id:$ticketReasonId, detail=$detail)"
+        return "Ticket(id=$id, user_id=$userId, asset_type_id=$assetTypeId, ticket_reason_id:$ticketReasonId, detail=$detail)"
     }
 }
 
@@ -295,14 +350,15 @@ data class TicketReason(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
-
-    @Column(name = "name")
     var reasonName: String? = null,
 
     //Entity relationships
-    @OneToOne(mappedBy = "ticket_reason")
-    var ticket: Ticket,
-){
+
+    //TICKET DONE
+    @OneToOne(mappedBy = "ticketReason")
+    var ticket: Ticket? = null,
+
+    ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is TicketReason) return false
@@ -317,7 +373,7 @@ data class TicketReason(
     }
 
     override fun toString(): String {
-        return "User(id=$id, name=$reasonName)"
+        return "TicketReason(id=$id, name=$reasonName)"
     }
 }
 
@@ -327,27 +383,26 @@ data class Asset(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
-
-    @Column(name = "name")
     var assetName: String? = null,
-
-    @Column(name = "asset_type_id")
-    var assetTypeId: Long? = null,
-
-    @Column(name = "available")
+    //var assetTypeId: Long? = null,
     var available: Boolean,
 
     //Entity relationships
-    @OneToOne(mappedBy = "asset")
-    var request: Request,
 
+    //REQUEST DONE
+    @OneToOne
+    @JoinColumn(name = "request_id", referencedColumnName = "id")
+    var request: Request? = null,
+
+    //ASSETTYPE DONE
     @OneToOne
     @JoinColumn(name = "asset_type_id", referencedColumnName = "id")
-    var assetType: AssetType,
+    var assetType: AssetType? = null,
+
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is AssetType) return false
+        if (other !is Asset) return false
 
         if (id != other.id) return false
 
@@ -359,7 +414,7 @@ data class Asset(
     }
 
     override fun toString(): String {
-        return "User(id=$id, name=$assetName, asset_type_id=$assetTypeId, available=$available)"
+        return "Asset(id=$id, name=$assetName,  available=$available)"
     }
 }
 
@@ -369,16 +424,18 @@ data class AssetType(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
-
-    @Column(name = "name")
     var assetTypeName: String? = null,
 
     //Entity relationships
-    @OneToOne(mappedBy = "asset_type")
-    var ticket: Ticket,
 
-    @OneToOne(mappedBy = "asset_type")
-    var asset: Asset,
+    //TICKET DONE
+    @OneToOne(mappedBy = "assetType")
+    var ticket: Ticket? = null,
+
+    //ASSET DONE
+    @OneToOne(mappedBy = "assetType")
+    var asset: Asset? = null,
+
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -394,27 +451,27 @@ data class AssetType(
     }
 
     override fun toString(): String {
-        return "User(id=$id, name=$assetTypeName)"
+        return "AssetType(id=$id, name=$assetTypeName)"
     }
 }
 
 @Entity
-@Table(name = "state")
-data class State(
+@Table(name = "requeststate")
+data class RequestState(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
-
-    @Column(name = "name")
     var stateName: String? = null,
 
     //Entity relationships
+
+    //REQUEST DONE
     @OneToOne(mappedBy = "state")
     var request: Request,
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is Request) return false
+        if (other !is RequestState) return false
 
         if (id != other.id) return false
 
@@ -426,7 +483,7 @@ data class State(
     }
 
     override fun toString(): String {
-        return "User(id=$id, name=$stateName)"
+        return "RequestState(id=$id, name=$stateName)"
     }
 }
 
@@ -437,33 +494,31 @@ data class Request(
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
 
-    @Column(name = "asset_id")
     var assetId: Long? = null,
 
-    @Column(name = "classroom_id")
     var classroomId: Long? = null,
 
-    @Column(name = "user_id")
-    var userId: Long? = null,
+   // var userId: Long? = null,
 
-    @Column(name = "date_hour")
     var dateHour: Date? = null,
 
-    @Column(name = "state_id")
     var stateId: Long? = null,
 
     //Entity relationships
-   @OneToOne
-    @JoinColumn(name = "asset_id", referencedColumnName = "id")
-    var assets: Asset,
 
+    // ASSET
+    @OneToOne(mappedBy = "request")
+    var assets: Asset? = null,
+
+    //USER
     @ManyToOne
-    @JoinColumn(name="user_id", nullable = false)
-    var ticket: Ticket,
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+    var user: User? = null,
 
+    //REQUESTSTATE
     @OneToOne
-    @JoinColumn(name = "state_id", referencedColumnName = "id")
-    var state: State,
+    @JoinColumn(name = "request_state_id", referencedColumnName = "id")
+    var state: RequestState,
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -479,31 +534,25 @@ data class Request(
     }
 
     override fun toString(): String {
-        return "User(id=$id, asset_id=$assetId, user_id=$userId, date_hour=$dateHour, state_id=$stateId)"
+        return "Request(id=$id, asset_id=$assetId, dateHour=$dateHour, state_id=$stateId)"
     }
 }
 
+
+ */
+
+//----------------------------------------Entities Jonathan
 @Entity
 @Table(name="class")
 data class Class(
-        @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        var id: Long? = null,
-
-        @Column(name = "name")
-        var className: String? = null,
-
-        @Column(name = "classroom")
-        var classClassroom: String? = null,
-
-        @Column(name = "teacher")
-        var classTeacher: Int? = null,
-
-        @Column(name = "students")
-        var studentsGroup: Int? = null,
-
-        @Column(name = "horary")
-        var classHorary: Int? = null
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
+    var className: String? = null,
+    var classClassroom: String? = null,
+    var classTeacher: Int? = null,
+    var studentsGroup: Int? = null,
+    var classHorary: Int? = null,
 ){
 
     override fun toString(): String {
@@ -514,12 +563,12 @@ data class Class(
 @Entity
 @Table(name="horary")
 data class Horary(
-        @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        var id: Long? = null,
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
 
-        @Column(name = "day")
-        var dayId: String? = null
+    @Column(name = "day")
+    var dayId: String? = null
 
 ){
 
@@ -531,15 +580,15 @@ data class Horary(
 @Entity
 @Table(name="day")
 data class Day(
-        @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        var id: Long? = null,
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
 
-        @Column(name = "day_number")
-        var dayNumber: Int? = null,
+    @Column(name = "day_number")
+    var dayNumber: Int? = null,
 
-        @Column(name = "hours")
-        var dayHours: Int? = null
+    @Column(name = "hours")
+    var dayHours: Int? = null
 ){
 
 }
@@ -547,12 +596,12 @@ data class Day(
 @Entity
 @Table(name="group")
 data class Group(
-        @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        var id: Long? = null,
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
 
-        @Column(name = "id_student")
-        var idStudent: Int? = null
+    @Column(name = "id_student")
+    var idStudent: Int? = null
 
 ){
 
@@ -561,21 +610,24 @@ data class Group(
 @Entity
 @Table(name="classroom")
 data class Classroom(
-        @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        var id: Long? = null,
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null,
 
-        @Column(name = "name")
-        var classroomName: String? = null,
+    @Column(name = "name")
+    var classroomName: String? = null,
 
-        @Column(name = "units")
-        var classroomUnits: String? = null,
+    @Column(name = "units")
+    var classroomUnits: String? = null,
 
-        @Column(name = "status")
-        var classroomStatus: Int? = null
+    @Column(name = "status")
+    var classroomStatus: Int? = null
 ){
 
     override fun toString(): String {
         return "Classroom(id='$id', name='$classroomName', status= '$classroomStatus')"
     }
 }
+
+
+
