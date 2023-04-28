@@ -42,11 +42,13 @@ data class User(
     )
     var roleUser: Set<Role>,
 
-    @OneToMany(mappedBy = "users")
-    var tickets: List<Ticket>,
+    @OneToMany
+    @JoinColumn(name= "user_id")
+    var userTickets: List<User>,
 
-    @OneToMany(mappedBy = "users")
-    var requests: List<Request>,
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    var userRequests: List<User>,
 
 ){
     override fun equals(other: Any?): Boolean {
@@ -260,15 +262,15 @@ data class Ticket(
 
     //Entity relationships
     @ManyToOne
-    @JoinColumn(name = "ticket_id")
-    var ticket: Ticket,
+    @JoinColumn(name = "user_id")
+    var users:User,
 
     @OneToOne
-    @JoinColumn(name = "asset_type_id", referencedColumnName = "id")
+    @JoinColumn(name = "asset_type_id")
     var assetType: AssetType,
 
     @OneToOne
-    @JoinColumn(name = "ticket_reason_id", referencedColumnName = "id")
+    @JoinColumn(name = "ticket_reason_id")
     var ticketReason: TicketReason,
 ){
     override fun equals(other: Any?): Boolean {
@@ -300,7 +302,8 @@ data class TicketReason(
     var reasonName: String? = null,
 
     //Entity relationships
-    @OneToOne(mappedBy = "ticket_reason")
+    @OneToOne
+    @JoinColumn(name = "ticket_reason_id")
     var ticket: Ticket,
 ){
     override fun equals(other: Any?): Boolean {
@@ -338,11 +341,12 @@ data class Asset(
     var available: Boolean,
 
     //Entity relationships
-    @OneToOne(mappedBy = "asset")
+    @OneToOne
+    @JoinColumn(name = "asset_id")
     var request: Request,
 
     @OneToOne
-    @JoinColumn(name = "asset_type_id", referencedColumnName = "id")
+    @JoinColumn(name = "asset_type_id")
     var assetType: AssetType,
 ){
     override fun equals(other: Any?): Boolean {
@@ -374,10 +378,12 @@ data class AssetType(
     var assetTypeName: String? = null,
 
     //Entity relationships
-    @OneToOne(mappedBy = "asset_type")
-    var ticket: Ticket,
+    @OneToOne
+    @JoinColumn(name = "asset_type_id")
+    var tickets: Ticket,
 
-    @OneToOne(mappedBy = "asset_type")
+    @OneToOne
+    @JoinColumn(name = "asset_type_id")
     var asset: Asset,
 ){
     override fun equals(other: Any?): Boolean {
@@ -409,7 +415,8 @@ data class State(
     var stateName: String? = null,
 
     //Entity relationships
-    @OneToOne(mappedBy = "state")
+    @OneToOne
+    @JoinColumn(name = "state_id")
     var request: Request,
 ){
     override fun equals(other: Any?): Boolean {
@@ -453,16 +460,16 @@ data class Request(
     var stateId: Long? = null,
 
     //Entity relationships
-   @OneToOne
-    @JoinColumn(name = "asset_id", referencedColumnName = "id")
+    @OneToOne
+    @JoinColumn(name = "asset_id")
     var assets: Asset,
 
     @ManyToOne
-    @JoinColumn(name="user_id", nullable = false)
-    var ticket: Ticket,
+    @JoinColumn(name="user_id")
+    var users: User,
 
     @OneToOne
-    @JoinColumn(name = "state_id", referencedColumnName = "id")
+    @JoinColumn(name = "state_id")
     var state: State,
 ){
     override fun equals(other: Any?): Boolean {
@@ -501,9 +508,9 @@ data class Class(
 
 ){
 
-    override fun toString(): String {
+   /* override fun toString(): String {
         return "Class(id='$id', name='$className', classroom='$classClassroom', teacher= '$classTeacher')"
-    }
+    }*/
 }
 
 @Entity
@@ -533,13 +540,13 @@ data class ClassDay(
         var id: Long? = null,
 
         @Column(name = "day") // 1: Lunes , 7: Domingo
-        var day: Int? = null
+        var day: Int? = null,
 
         @Column(name = "id_class")
-        var idClass: Int? = null
+        var idClass: Int? = null,
 
         @Column(name = "class_time")
-        var classTime: Int? = null
+        var classTime: Int? = null,
 
 ){
 
