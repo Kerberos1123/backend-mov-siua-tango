@@ -241,18 +241,13 @@ data class User(
 
     // Entity Relationship
 
+    @OneToMany
+    @JoinColumn(name= "user_id")
+    var userTickets: List<User>,
 
-    /*
-    //TICKETS DONE
-    @OneToMany(mappedBy = "user")
-    var tickets: List<Ticket>?,
-
-    //REQUESTS DONE
-    @OneToMany(mappedBy = "user")
-    var requests: List<Request>?,
-
-
-     */
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    var userRequests: List<User>,
 
     @OneToMany(mappedBy = "user")
     var taskList: List<Task>? = null,
@@ -289,7 +284,6 @@ data class User(
 }
 
 
-/*
 @Entity
 @Table(name = "ticket")
 data class Ticket(
@@ -312,17 +306,17 @@ data class Ticket(
 
     //USER DONE
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
-    var user: User? = null,
+    @JoinColumn(name = "user_id")
+    var users:User,
 
     //ASSETTYPE DONE
     @OneToOne
-    @JoinColumn(name = "asset_type_id", referencedColumnName = "id")
+    @JoinColumn(name = "asset_type_id")
     var assetType: AssetType,
 
     //TICKETREASON DONE
     @OneToOne
-    @JoinColumn(name = "ticket_reason_id", referencedColumnName = "id")
+    @JoinColumn(name = "ticket_reason_id")
     var ticketReason: TicketReason,
 
     ){
@@ -355,8 +349,9 @@ data class TicketReason(
     //Entity relationships
 
     //TICKET DONE
-    @OneToOne(mappedBy = "ticketReason")
-    var ticket: Ticket? = null,
+    @OneToOne
+    @JoinColumn(name = "ticket_reason_id")
+    var ticket: Ticket,
 
     ){
     override fun equals(other: Any?): Boolean {
@@ -384,20 +379,20 @@ data class Asset(
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
     var assetName: String? = null,
-    //var assetTypeId: Long? = null,
+    var assetTypeId: Long? = null,
     var available: Boolean,
 
     //Entity relationships
 
     //REQUEST DONE
     @OneToOne
-    @JoinColumn(name = "request_id", referencedColumnName = "id")
-    var request: Request? = null,
+    @JoinColumn(name = "asset_id")
+    var request: Request,
 
     //ASSETTYPE DONE
     @OneToOne
-    @JoinColumn(name = "asset_type_id", referencedColumnName = "id")
-    var assetType: AssetType? = null,
+    @JoinColumn(name = "asset_type_id")
+    var assetType: AssetType,
 
 ){
     override fun equals(other: Any?): Boolean {
@@ -429,12 +424,14 @@ data class AssetType(
     //Entity relationships
 
     //TICKET DONE
-    @OneToOne(mappedBy = "assetType")
-    var ticket: Ticket? = null,
+    @OneToOne
+    @JoinColumn(name = "asset_type_id")
+    var tickets: Ticket,
 
     //ASSET DONE
-    @OneToOne(mappedBy = "assetType")
-    var asset: Asset? = null,
+    @OneToOne
+    @JoinColumn(name = "asset_type_id")
+    var asset: Asset,
 
 ){
     override fun equals(other: Any?): Boolean {
@@ -466,8 +463,9 @@ data class RequestState(
     //Entity relationships
 
     //REQUEST DONE
-    @OneToOne(mappedBy = "state")
-    var request: Request,
+    @OneToOne
+    @JoinColumn(name = "state_id")
+    var requestState: RequestState,
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -498,7 +496,7 @@ data class Request(
 
     var classroomId: Long? = null,
 
-   // var userId: Long? = null,
+    var userId: Long? = null,
 
     var dateHour: Date? = null,
 
@@ -507,17 +505,18 @@ data class Request(
     //Entity relationships
 
     // ASSET
-    @OneToOne(mappedBy = "request")
-    var assets: Asset? = null,
+    @OneToOne
+    @JoinColumn(name = "asset_id")
+    var assets: Asset,
 
     //USER
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
-    var user: User? = null,
+    @JoinColumn(name="user_id")
+    var users: User,
 
     //REQUESTSTATE
     @OneToOne
-    @JoinColumn(name = "request_state_id", referencedColumnName = "id")
+    @JoinColumn(name = "state_id")
     var state: RequestState,
 ){
     override fun equals(other: Any?): Boolean {
@@ -538,8 +537,6 @@ data class Request(
     }
 }
 
-
- */
 
 //----------------------------------------Entities Jonathan
 @Entity
