@@ -223,8 +223,6 @@ data class Priority(
 }
 
 
-
-
 @Entity
 @Table(name = "users")
 data class User(
@@ -241,27 +239,11 @@ data class User(
 
     // Entity Relationship
 
-    @OneToMany
-    @JoinColumn(name= "user_id")
-    var userTickets: List<User>,
-
-<<<<<<< HEAD
-    /*
-
-    //TICKETS DONE
     @OneToMany(mappedBy = "user")
-    var tickets: List<Ticket>?,
+    var userTickets: List<Ticket>? = null,
 
-    //REQUESTS DONE
     @OneToMany(mappedBy = "user")
-    var requests: List<Request>?,
-
-     */
-=======
-    @OneToMany
-    @JoinColumn(name = "user_id")
-    var userRequests: List<User>,
->>>>>>> 66db25d937f0319b9e33c19c952867fca6aa3bfd
+    var userRequests: List<Request>? = null,
 
     @OneToMany(mappedBy = "user")
     var taskList: List<Task>? = null,
@@ -307,31 +289,29 @@ data class Ticket(
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", insertable = false, updatable = false)
     var userId: Long? = null,
 
-    @Column(name = "asset_type_id") // explicitly specify the physical column name
+    @Column(name = "asset_type_id", insertable = false, updatable = false)
     var assetTypeId: Long? = null,
 
-    @Column(name = "ticket_reason_id")
+    @Column(name = "ticket_reason_id", insertable = false, updatable = false)
     var ticketReasonId: Long? = null,
 
     var detail: String? = null,
 
     //Entity relationships
 
-    /*
-    //USER DONE
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    var users:User,
+    @JoinColumn(name = "user_id",nullable = false, referencedColumnName = "id")
+    var user: User? = null,
 
-    //ASSETTYPE DONE
-    @OneToOne
-    @JoinColumn(name = "asset_type_id")
-    var assetType: AssetType,
+    @ManyToOne
+    @JoinColumn(name = "asset_type_id",nullable = false, referencedColumnName = "id")
+    var assetType: AssetType? = null,
 
-    //TICKETREASON DONE
+    /*
+    //TICKETREASON not Done
     @OneToOne
     @JoinColumn(name = "ticket_reason_id")
     var ticketReason: TicketReason,
@@ -447,6 +427,9 @@ data class AssetType(
 
     //Entity relationships
 
+    @OneToMany(mappedBy = "assetType", cascade = [CascadeType.ALL])
+    var tickets: List<Ticket>? = null
+
     /*
 
     //TICKET DONE
@@ -492,17 +475,16 @@ data class RequestState(
 
     /*
     //REQUEST DONE
-<<<<<<< HEAD
     @OneToOne(mappedBy = "state")
     var request: Request,
 
-     */
 
-=======
     @OneToOne
     @JoinColumn(name = "state_id")
     var requestState: RequestState,
->>>>>>> 66db25d937f0319b9e33c19c952867fca6aa3bfd
+
+     */
+
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -533,6 +515,7 @@ data class Request(
 
     var classroomId: Long? = null,
 
+    @Column(name = "user_id",  insertable = false, updatable = false)
     var userId: Long? = null,
 
     var dateHour: Date? = null,
@@ -541,16 +524,17 @@ data class Request(
 
     //Entity relationships
 
+    @ManyToOne
+    @JoinColumn(name = "user_id",nullable = false, referencedColumnName = "id")
+    var user: User? = null
+
     /*
     // ASSET
     @OneToOne
     @JoinColumn(name = "asset_id")
     var assets: Asset,
 
-    //USER
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    var users: User,
+
 
     //REQUESTSTATE
     @OneToOne

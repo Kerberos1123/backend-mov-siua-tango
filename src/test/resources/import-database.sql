@@ -40,6 +40,6 @@ INSERT INTO public.task (id, create_date, due_date, notes, title, priority_id, s
 ALTER SEQUENCE hibernate_sequence RESTART WITH 3;
 
 /** Classes **/
-
 INSERT INTO public.class (id, class_name, class_classroom,class_teacher,students_group,class_horary) VALUES (1,'Class 1','Classroom 1','0000','0001','0002');
 
+/** Tickets **/
