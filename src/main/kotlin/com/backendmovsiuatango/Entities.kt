@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import java.util.*
 import javax.persistence.*
 
+
 @Entity
 @Table(name = "reminder")
 data class Reminder(
@@ -310,12 +311,12 @@ data class Ticket(
     @JoinColumn(name = "asset_type_id",nullable = false, referencedColumnName = "id")
     var assetType: AssetType? = null,
 
-    /*
-    //TICKETREASON not Done
-    @OneToOne
+
+    //TICKETREASON Done
+    @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "ticket_reason_id")
-    var ticketReason: TicketReason,
-    */
+    var ticketReason: TicketReason? = null,
+
 
     ){
     override fun equals(other: Any?): Boolean {
@@ -342,17 +343,11 @@ data class TicketReason(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
+    @Column(name = "name", insertable = false, updatable = false)
     var reasonName: String? = null,
 
     //Entity relationships
 
-    /*
-    //TICKET DONE
-    @OneToOne
-    @JoinColumn(name = "ticket_reason_id")
-    var ticket: Ticket,
-
-    */
 
     ){
     override fun equals(other: Any?): Boolean {
@@ -379,24 +374,20 @@ data class Asset(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
+    @Column(name = "name", insertable = false, updatable = false)
     var assetName: String? = null,
+    @Column(name = "asset_type_id", insertable = false, updatable = false)
     var assetTypeId: Long? = null,
+    @Column(name = "available", insertable = false, updatable = false)
     var available: Boolean,
 
     //Entity relationships
 
-    /*
-    //REQUEST DONE
-    @OneToOne
-    @JoinColumn(name = "asset_id")
-    var request: Request,
-
     //ASSETTYPE DONE
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "asset_type_id")
-    var assetType: AssetType,
+    var assetType: AssetType? = null,
 
-     */
 
 ){
     override fun equals(other: Any?): Boolean {
@@ -423,6 +414,7 @@ data class AssetType(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
+    @Column(name = "name", insertable = false, updatable = false)
     var assetTypeName: String? = null,
 
     //Entity relationships
@@ -430,19 +422,6 @@ data class AssetType(
     @OneToMany(mappedBy = "assetType", cascade = [CascadeType.ALL])
     var tickets: List<Ticket>? = null
 
-    /*
-
-    //TICKET DONE
-    @OneToOne
-    @JoinColumn(name = "asset_type_id")
-    var tickets: Ticket,
-
-    //ASSET DONE
-    @OneToOne
-    @JoinColumn(name = "asset_type_id")
-    var asset: Asset,
-
-     */
 
 ){
     override fun equals(other: Any?): Boolean {
@@ -469,21 +448,10 @@ data class RequestState(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
+    @Column(name = "name", insertable = false, updatable = false)
     var stateName: String? = null,
 
     //Entity relationships
-
-    /*
-    //REQUEST DONE
-    @OneToOne(mappedBy = "state")
-    var request: Request,
-
-
-    @OneToOne
-    @JoinColumn(name = "state_id")
-    var requestState: RequestState,
-
-     */
 
 ){
     override fun equals(other: Any?): Boolean {
@@ -511,37 +479,37 @@ data class Request(
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
 
+    @Column(name = "asset_id", insertable = false, updatable = false)
     var assetId: Long? = null,
 
+    @Column(name = "classroom_id", insertable = false, updatable = false)
     var classroomId: Long? = null,
 
     @Column(name = "user_id",  insertable = false, updatable = false)
     var userId: Long? = null,
 
+    @Column(name = "date_hour", insertable = false, updatable = false)
     var dateHour: Date? = null,
 
+    @Column(name = "state_id", insertable = false, updatable = false)
     var stateId: Long? = null,
 
     //Entity relationships
 
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false, referencedColumnName = "id")
-    var user: User? = null
+    var user: User? = null,
 
-    /*
     // ASSET
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "asset_id")
     var assets: Asset,
 
-
-
     //REQUESTSTATE
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "state_id")
     var state: RequestState,
 
-     */
 
 ){
     override fun equals(other: Any?): Boolean {
