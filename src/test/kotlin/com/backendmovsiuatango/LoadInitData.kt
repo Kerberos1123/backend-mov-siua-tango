@@ -14,24 +14,34 @@ import org.springframework.test.context.jdbc.Sql
 class LoadInitData (
     @Autowired
     val taskRepository: TaskRepository,
-    val classRepository: ClassRepository,
+
+    @Autowired
     val userRepository: UserRepository
+
 ){
     @Test
-    fun testTaskFindAll() {
+    fun testEjemplo() {
 
         val taskList: List<Task> = taskRepository.findAll()
+
         Assertions.assertTrue(taskList.size == 2)
 
     }
-    @Test
-    fun  testClassFindAll(){
 
-        val classList: List<Class> = classRepository.findAll()
-        Assertions.assertTrue(classList.size == 1)
+    @Test   //------------- TEST DANIEL
+    fun test1(){
+
+        val userList: List<User> = userRepository.findAll()
+
+        Assertions.assertTrue(userList.size == 3)
+        
     }
-    @Test
-    fun testUserFindAll(){
+    @Test   //------------- TEST JONATHAN
+    fun test2(){
+
+    }
+    @Test   //------------- TEST NACHO
+    fun test3(){
 
     }
 

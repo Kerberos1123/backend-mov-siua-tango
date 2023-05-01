@@ -223,7 +223,7 @@ data class Priority(
 }
 
 
-//-------------------------------------------------------------------- Entities nacho
+
 
 @Entity
 @Table(name = "users")
@@ -243,6 +243,7 @@ data class User(
 
 
     /*
+
     //TICKETS DONE
     @OneToMany(mappedBy = "user")
     var tickets: List<Ticket>?,
@@ -250,7 +251,6 @@ data class User(
     //REQUESTS DONE
     @OneToMany(mappedBy = "user")
     var requests: List<Request>?,
-
 
      */
 
@@ -288,8 +288,9 @@ data class User(
 
 }
 
+//-------------------------------------------------------------------- Entities nacho
 
-/*
+
 @Entity
 @Table(name = "ticket")
 data class Ticket(
@@ -310,6 +311,7 @@ data class Ticket(
 
     //Entity relationships
 
+    /*
     //USER DONE
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
@@ -324,6 +326,7 @@ data class Ticket(
     @OneToOne
     @JoinColumn(name = "ticket_reason_id", referencedColumnName = "id")
     var ticketReason: TicketReason,
+    */
 
     ){
     override fun equals(other: Any?): Boolean {
@@ -354,9 +357,12 @@ data class TicketReason(
 
     //Entity relationships
 
+    /*
     //TICKET DONE
     @OneToOne(mappedBy = "ticketReason")
     var ticket: Ticket? = null,
+
+    */
 
     ){
     override fun equals(other: Any?): Boolean {
@@ -389,6 +395,7 @@ data class Asset(
 
     //Entity relationships
 
+    /*
     //REQUEST DONE
     @OneToOne
     @JoinColumn(name = "request_id", referencedColumnName = "id")
@@ -398,6 +405,8 @@ data class Asset(
     @OneToOne
     @JoinColumn(name = "asset_type_id", referencedColumnName = "id")
     var assetType: AssetType? = null,
+
+     */
 
 ){
     override fun equals(other: Any?): Boolean {
@@ -428,6 +437,8 @@ data class AssetType(
 
     //Entity relationships
 
+    /*
+
     //TICKET DONE
     @OneToOne(mappedBy = "assetType")
     var ticket: Ticket? = null,
@@ -435,6 +446,8 @@ data class AssetType(
     //ASSET DONE
     @OneToOne(mappedBy = "assetType")
     var asset: Asset? = null,
+
+     */
 
 ){
     override fun equals(other: Any?): Boolean {
@@ -465,9 +478,13 @@ data class RequestState(
 
     //Entity relationships
 
+    /*
     //REQUEST DONE
     @OneToOne(mappedBy = "state")
     var request: Request,
+
+     */
+
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -506,6 +523,7 @@ data class Request(
 
     //Entity relationships
 
+    /*
     // ASSET
     @OneToOne(mappedBy = "request")
     var assets: Asset? = null,
@@ -519,6 +537,9 @@ data class Request(
     @OneToOne
     @JoinColumn(name = "request_state_id", referencedColumnName = "id")
     var state: RequestState,
+
+     */
+
 ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -538,8 +559,6 @@ data class Request(
     }
 }
 
-
- */
 
 //----------------------------------------Entities Jonathan
 @Entity
