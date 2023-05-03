@@ -532,88 +532,92 @@ data class Request(
 @Entity
 @Table(name="class")
 data class Class(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null,
-    var className: String? = null,
-    var classClassroom: String? = null,
-    var classTeacher: Int? = null,
-    var studentsGroup: Int? = null,
-    var classHorary: Int? = null,
-){
+        @Id
+        @GeneratedValue(strategy = GenerationType.AUTO)
+        var id: Long? = null,
+
+        @Column(name = "name")
+        var className: String? = null,
+
+        @Column(name = "id_classroom")
+        var classClassroom: Int? = null,
+
+        @Column(name = "id_teacher")
+        var classTeacher: Int? = null,
+
+        // Entity Relationship
+
+
+        ){
 
     override fun toString(): String {
-        return "Class(id='$id', name='$className', classroom='$classClassroom', teacher= '$classTeacher', students= '$studentsGroup', horary= '$classHorary')"
+        return "Class(id='$id', name='$className', classroom='$classClassroom', teacher= '$classTeacher')"
     }
-}
-
-@Entity
-@Table(name="horary")
-data class Horary(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null,
-
-    @Column(name = "day")
-    var dayId: String? = null
-
-){
-
-    override fun toString(): String {
-        return "Horary(id='$id', day='$dayId')"
-    }
-}
-
-@Entity
-@Table(name="day")
-data class Day(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null,
-
-    @Column(name = "day_number")
-    var dayNumber: Int? = null,
-
-    @Column(name = "hours")
-    var dayHours: Int? = null
-){
-
-}
-
-@Entity
-@Table(name="group")
-data class Group(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null,
-
-    @Column(name = "id_student")
-    var idStudent: Int? = null
-
-){
-
 }
 
 @Entity
 @Table(name="classroom")
 data class Classroom(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null,
+        @Id
+        @GeneratedValue(strategy = GenerationType.AUTO)
+        var id: Long? = null,
 
-    @Column(name = "name")
-    var classroomName: String? = null,
+        @Column(name = "name")
+        var classroomName: String? = null,
 
-    @Column(name = "units")
-    var classroomUnits: String? = null,
-
-    @Column(name = "status")
-    var classroomStatus: Int? = null
+        @Column(name = "state_id")
+        var classroomState: Int? = null
 ){
 
     override fun toString(): String {
-        return "Classroom(id='$id', name='$classroomName', status= '$classroomStatus')"
+        return "Classroom(id='$id', name='$classroomName', state_id= '$classroomState')"
     }
+}
+
+@Entity
+@Table(name="classroom_state")
+data class ClassroomState(
+        @Id
+        @GeneratedValue(strategy = GenerationType.AUTO)
+        var id: Long? = null,
+        @Column(name = "name", insertable = false, updatable = false)
+        var stateName: String? = null,
+){
+}
+
+@Entity
+@Table(name="class_day")
+data class ClassDay(
+        @Id
+        @GeneratedValue(strategy = GenerationType.AUTO)
+        var id: Long? = null,
+
+        @Column(name = "day") // 1: Lunes , 7: Domingo
+        var day: Int? = null,
+
+        @Column(name = "id_class")
+        var idClass: Int? = null,
+
+        @Column(name = "class_time")
+        var classTime: Int? = null
+
+){
+}
+
+@Entity
+@Table(name="inscription")
+data class Inscription(
+        @Id
+        @GeneratedValue(strategy = GenerationType.AUTO)
+        var id: Long? = null,
+
+        @Column(name = "id_user")
+        var idUser: Int? = null,
+
+        @Column(name = "id_class")
+        var idClass: Int? = null
+){
+
 }
 
 
