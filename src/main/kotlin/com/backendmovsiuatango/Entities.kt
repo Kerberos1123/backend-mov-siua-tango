@@ -311,10 +311,8 @@ data class Ticket(
     @JoinColumn(name = "asset_type_id",nullable = false, referencedColumnName = "id")
     var assetType: AssetType? = null,
 
-
-    //TICKETREASON Done
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "ticket_reason_id")
+    @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "ticket_reason_id",nullable = false, referencedColumnName = "id")
     var ticketReason: TicketReason? = null,
 
 
@@ -347,8 +345,6 @@ data class TicketReason(
     var reasonName: String? = null,
 
     //Entity relationships
-
-
     ){
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -419,9 +415,10 @@ data class AssetType(
 
     //Entity relationships
 
+    /*
     @OneToMany(mappedBy = "assetType", cascade = [CascadeType.ALL])
     var tickets: List<Ticket>? = null
-
+     */
 
 ){
     override fun equals(other: Any?): Boolean {

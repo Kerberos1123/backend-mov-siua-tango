@@ -43,3 +43,4 @@ ALTER SEQUENCE hibernate_sequence RESTART WITH 3;
 INSERT INTO public.class (id, class_name, class_classroom,class_teacher,students_group,class_horary) VALUES (1,'Class 1','Classroom 1','0000','0001','0002');
 
 /** Tickets **/
+/** INSERT INTO public.ticket(id,userId,) **/
