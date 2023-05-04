@@ -545,8 +545,30 @@ data class Class(
         @Column(name = "id_teacher", insertable = false, updatable = false)
         var idTeacher: Long? = null,
 
-
         // Entity Relationships
+        @OneToOne(cascade = [CascadeType.ALL])
+        @JoinColumn(name = "id_classroom")
+        var classClassroom: Classroom? = null,
+
+        @OneToOne(cascade = [CascadeType.ALL])
+        @JoinColumn(name = "id_teacher")
+        var classTeacher: User? = null,
+
+        @ManyToMany
+        @JoinTable(
+                name = "class_inscriptions",
+                joinColumns = [JoinColumn(name = "class_id", referencedColumnName = "id")],
+                inverseJoinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")]
+        )
+        var userList: Set<User>,
+
+        @ManyToMany
+        @JoinTable(
+                name = "class_days",
+                joinColumns = [JoinColumn(name = "class_id", referencedColumnName = "id")],
+                inverseJoinColumns = [JoinColumn(name = "day_id", referencedColumnName = "id")]
+        )
+        var daysList: Set<Day>
 
 ){
 
@@ -569,7 +591,10 @@ data class Classroom(
         @Column(name = "state_id", insertable = false, updatable = false)
         var idState: Long? = null,
 
-
+        // Entity Relationships
+        @OneToOne(cascade = [CascadeType.ALL])
+        @JoinColumn(name = "state_id", referencedColumnName = "id")
+        var classroomState: ClassroomState? = null,
 
         ){
 
@@ -592,8 +617,8 @@ data class ClassroomState(
 }
 
 @Entity
-@Table(name="class_day")
-data class ClassDay(
+@Table(name="day")
+data class Day(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
         var id: Long? = null,
@@ -601,14 +626,12 @@ data class ClassDay(
         @Column(name = "day") // 1: Lunes , 7: Domingo
         var day: Int? = null,
 
-        @Column(name = "id_class")
-        var idClass: Long? = null,
-
         @Column(name = "start_time")
         var startTime: String? = null,
 
         @Column(name = "finish_time")
         var finishTime: String? = null,
+
 
 
 ){
