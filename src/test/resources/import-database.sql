@@ -39,9 +39,5 @@ INSERT INTO public.task (id, create_date, due_date, notes, title, priority_id, s
 INSERT INTO public.task (id, create_date, due_date, notes, title, priority_id, status_id, user_id) VALUES (2, '2020-08-24', '2020-08-27', 'More Notes', 'Coordinate with professors', 2, 1, 1);
 ALTER SEQUENCE hibernate_sequence RESTART WITH 3;
 
-/** Classes **/
-INSERT INTO public.class (id, name, id_classroom,id_teacher) VALUES (1,'Programacion IV',0,2);
-INSERT INTO public.class (id, name, id_classroom,id_teacher) VALUES (2,'Calculo 1',2,1);
-
 /** Tickets **/
 /** INSERT INTO public.ticket(id,userId,) **/

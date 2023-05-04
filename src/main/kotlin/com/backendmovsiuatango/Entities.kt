@@ -539,19 +539,20 @@ data class Class(
         @Column(name = "name")
         var className: String? = null,
 
-        @Column(name = "id_classroom")
-        var classClassroom: Int? = null,
+        @Column(name = "id_classroom", insertable = false, updatable = false)
+        var idClassroom: Long? = null,
 
-        @Column(name = "id_teacher")
-        var classTeacher: Int? = null,
-
-        // Entity Relationship
+        @Column(name = "id_teacher", insertable = false, updatable = false)
+        var idTeacher: Long? = null,
 
 
-        ){
+        // Entity Relationships
+
+){
+
 
     override fun toString(): String {
-        return "Class(id='$id', name='$className', classroom='$classClassroom', teacher= '$classTeacher')"
+        return "Class(id='$id', name='$className', classroom='$idClassroom', teacher= '$idTeacher')"
     }
 }
 
@@ -565,12 +566,15 @@ data class Classroom(
         @Column(name = "name")
         var classroomName: String? = null,
 
-        @Column(name = "state_id")
-        var classroomState: Int? = null
-){
+        @Column(name = "state_id", insertable = false, updatable = false)
+        var idState: Long? = null,
+
+
+
+        ){
 
     override fun toString(): String {
-        return "Classroom(id='$id', name='$classroomName', state_id= '$classroomState')"
+        return "Classroom(id='$id', name='$classroomName', state_id= '$idState')"
     }
 }
 
@@ -583,6 +587,8 @@ data class ClassroomState(
         @Column(name = "name", insertable = false, updatable = false)
         var stateName: String? = null,
 ){
+    // Entity Relationships
+
 }
 
 @Entity
@@ -596,28 +602,16 @@ data class ClassDay(
         var day: Int? = null,
 
         @Column(name = "id_class")
-        var idClass: Int? = null,
+        var idClass: Long? = null,
 
-        @Column(name = "class_time")
-        var classTime: Int? = null
+        @Column(name = "start_time")
+        var startTime: String? = null,
+
+        @Column(name = "finish_time")
+        var finishTime: String? = null,
+
 
 ){
-}
-
-@Entity
-@Table(name="inscription")
-data class Inscription(
-        @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        var id: Long? = null,
-
-        @Column(name = "id_user")
-        var idUser: Int? = null,
-
-        @Column(name = "id_class")
-        var idClass: Int? = null
-){
-
 }
 
 
