@@ -41,3 +41,16 @@ ALTER SEQUENCE hibernate_sequence RESTART WITH 3;
 
 /** Tickets **/
 /** INSERT INTO public.ticket(id,userId,) **/
+
+/** Classroom State **/
+INSERT INTO public.classroom_state (id, name) VALUES (1,'Cerrada');
+INSERT INTO public.classroom_state (id, name) VALUES (2,'Abierta');
+INSERT INTO public.classroom_state (id, name) VALUES (3,'Mantenimiento');
+
+/** Classrooms **/
+INSERT INTO public.classroom (id, name, state_id) VALUES (1,'C18',1);
+INSERT INTO public.classroom (id, name, state_id) VALUES (2,'C19',3);
+
+/** Classes **/
+INSERT INTO public.class (id, name, id_classroom,id_teacher) VALUES (1,'Programacion IV',1,2);
+INSERT INTO public.class (id, name, id_classroom,id_teacher) VALUES (2,'Calculo 1',2,1);
