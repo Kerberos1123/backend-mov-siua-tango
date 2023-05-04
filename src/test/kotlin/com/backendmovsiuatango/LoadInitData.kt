@@ -21,7 +21,10 @@ class LoadInitData (
     val userRepository: UserRepository,
 
     @Autowired
-    val ticketRepository: TicketRepository
+    val ticketRepository: TicketRepository,
+
+    @Autowired
+    val classRepository: ClassRepository
 
 ){
     @Test
@@ -43,6 +46,9 @@ class LoadInitData (
     }
     @Test   //------------- TEST JONATHAN
     fun test2(){
+
+        val classList: List<Class> = classRepository.findAll()
+        Assertions.assertTrue( classList.size == 2)
 
     }
     @Test   //------------- TEST NACHO
