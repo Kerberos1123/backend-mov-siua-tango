@@ -18,7 +18,10 @@ class LoadInitData (
     val taskRepository: TaskRepository,
 
     @Autowired
-    val userRepository: UserRepository
+    val userRepository: UserRepository,
+
+    @Autowired
+    val ticketRepository: TicketRepository
 
 ){
     @Test
@@ -44,6 +47,8 @@ class LoadInitData (
     }
     @Test   //------------- TEST NACHO
     fun test3(){
+        val ticketList: List <Ticket> = ticketRepository.findAll()
+        Assertions.assertTrue(ticketList.size==1)
 
     }
 

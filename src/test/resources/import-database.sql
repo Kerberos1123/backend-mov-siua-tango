@@ -43,5 +43,14 @@ ALTER SEQUENCE hibernate_sequence RESTART WITH 3;
 INSERT INTO public.class (id, name, id_classroom,id_teacher) VALUES (1,'Programacion IV',0,2);
 INSERT INTO public.class (id, name, id_classroom,id_teacher) VALUES (2,'Calculo 1',2,1);
 
+
+/**Asset Type**/
+INSERT INTO public.asset_type(name, id) VALUES ('Computadora',001);
+INSERT INTO public.asset_type(name, id) VALUES ('Proyector',002);
+
+/**Ticket Reason**/
+INSERT INTO public.ticket_reason(name, id) VALUES ('Material perdido',01);
+INSERT INTO public.ticket_reason(name, id) VALUES ('Material con daños',02);
+
 /** Tickets **/
-/** INSERT INTO public.ticket(id,userId,) **/
+INSERT INTO public.ticket(id,user_id,asset_type_id,ticket_reason_id,detail) VALUES (1,1,001,02, 'Screen blacks out at times');

@@ -28,3 +28,6 @@ interface StatusRepository : JpaRepository<Status, Long> {
 }
 @Repository
 interface ClassRepository: JpaRepository<Class, Long>
+
+@Repository
+interface TicketRepository: JpaRepository<Ticket,Long>
