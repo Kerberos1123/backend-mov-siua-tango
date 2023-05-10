@@ -2,6 +2,7 @@ package com.backendmovsiuatango
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.util.*
+import javax.persistence.Column
 
 
 data class StatusDetails(
@@ -79,4 +80,61 @@ data class UserSignUpInput(
     var lastName: String? = null,
     var email: String? = null,
     var password: String? = null,
+)
+//-----------------------------------------------------DTOs Nacho
+data class TicketInput(
+    var id:Long? = null,
+    var user: UserResult?=null,
+    var assetType:AssetTypeDetails?=null,
+    var ticketReasons:TicketReasonDetails?=null,
+    var detail:String?=null,
+)
+
+data class TicketResult(
+    var id:Long,
+    var userId: UserResult,
+    var assetType:AssetTypeDetails,
+    var ticketReasons:TicketReasonDetails,
+    var detail:String,
+)
+
+data class TicketReasonDetails(
+    var id:Long?=null,
+    var name:String?=null,
+)
+
+data class AssetDetails(
+    var id: Long? = null,
+    var assetName: String? = null,
+    var assetType: AssetTypeDetails? = null,
+    var available: Boolean?=null,
+)
+
+data class AssetTypeDetails(
+    var id:Long?=null,
+    var name:String?=null
+)
+
+data class RequestStateDetails(
+    var id:Long?=null,
+    var name:String?=null,
+)
+
+data class RequestInput(
+    var id: Long? = null,
+    var asset: AssetDetails? = null,
+   // var classroom: ClassroomDetails? = null,
+    var user: UserResult? = null,
+    var dateHour: Date? = null,
+    @JsonFormat(pattern="dd/MM/yyyy")
+    var state:RequestStateDetails?=null,
+)
+
+data class RequestResult(
+    var id: Long,
+    var asset: AssetDetails,
+    // var classroom: ClassroomDetails,
+    var user: UserResult,
+    var dateHour: Date,
+    var state:RequestStateDetails,
 )
