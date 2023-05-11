@@ -1,0 +1,197 @@
+package com.backendmovsiuatango
+
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import java.util.*
+
+interface PriorityService {
+
+    fun findAll(): List<PriorityDetails>?
+
+    fun findById(id: Long): PriorityDetails?
+}
+
+@Service
+class AbstractPriorityService(
+    @Autowired
+    val priorityRepository: PriorityRepository,
+
+    @Autowired
+    val priorityMapper: PriorityMapper,
+
+    ) : PriorityService {
+
+    override fun findAll(): List<PriorityDetails>? {
+        return priorityMapper.priorityListToPriorityDetailsList(
+            priorityRepository.findAll()
+        )
+    }
+
+    @Throws(NoSuchElementException::class)
+    override fun findById(id: Long): PriorityDetails? {
+        val priority: Priority = priorityRepository.findById(id).orElse(null)
+            ?: throw NoSuchElementException(String.format("The Priority with the id: %s not found!", id))
+        return priorityMapper.priorityToPriorityDetails(priority)
+    }
+}
+
+interface TaskService {
+    /**
+     * Find all Task
+     * @return a list of Users
+     */
+    fun findAll(): List<TaskResult>?
+
+    /**
+     * Get one Task by id
+     * @param id of the Task
+     * @return the Task found
+     */
+    fun findById(id: Long): TaskResult?
+
+    /**
+     * Save and flush a Task entity in the database
+     * @param taskInput
+     * @return the user created
+     */
+    fun create(taskInput: TaskInput): TaskResult?
+
+    /**
+     * Update a Task entity in the database
+     * @param taskInput the dto input for Task
+     * @return the new Task created
+     */
+    fun update(taskInput: TaskInput): TaskResult?
+
+    /**
+     * Delete a Task by id from Database
+     * @param id of the Task
+     */
+    fun deleteById(id: Long)
+}
+
+@Service
+class AbstractTaskService  (
+    @Autowired
+    val taskRepository: TaskRepository,
+    @Autowired
+    val userRepository: UserRepository,
+    @Autowired
+    val statusRepository: StatusRepository,
+    @Autowired
+    val taskMapper: TaskMapper,
+) : TaskService {
+
+    override fun findAll(): List<TaskResult>? {
+        return taskMapper.taskListToTaskListResult(
+            taskRepository.findAll()
+        )
+    }
+
+
+    @Throws(NoSuchElementException::class)
+    override fun findById(id: Long): TaskResult? {
+        val task: Task = taskRepository.findById(id).orElse(null)
+            ?: throw NoSuchElementException(String.format("The Task with the id: %s not found!", id))
+        return taskMapper.taskToTaskResult(task)
+    }
+
+
+    override fun create(taskInput: TaskInput): TaskResult? {
+        val task: Task = taskMapper.taskInputToTask(taskInput)
+        if (task.user == null){
+            val user = userRepository.findByEmail(LoggedUser.get()).orElse(null) //LoggedUser viene de Security.kt
+            task.user = user
+        }
+        if (task.status == null) {
+            val status = statusRepository.findByLabel("Pending").orElse(null)
+            task.status = status
+        }
+        return taskMapper.taskToTaskResult(
+            taskRepository.save(task)
+        )
+    }
+
+
+    @Throws(NoSuchElementException::class)
+    override fun update(taskInput: TaskInput): TaskResult? {
+        val task: Task = taskRepository.findById(taskInput.id!!).orElse(null)
+            ?: throw NoSuchElementException(String.format("The Task with the id: %s not found!", taskInput.id))
+        var taskUpdated: Task = task
+        taskUpdated.priority = Priority()
+        taskMapper.taskInputToTask(taskInput, taskUpdated)
+        return taskMapper.taskToTaskResult(taskRepository.save(taskUpdated))
+    }
+
+
+    @Throws(NoSuchElementException::class)
+    override fun deleteById(id: Long) {
+        taskRepository.findById(id).orElse(null)
+            ?: throw NoSuchElementException(String.format("The Task with the id: %s not found!", id))
+
+        taskRepository.deleteById(id)
+    }
+
+}
+
+@Service
+@Transactional
+class AppUserDetailsService(
+    @Autowired
+    val userRepository: UserRepository,
+    @Autowired
+    val roleRepository: RoleRepository,
+) : UserDetailsService {
+
+
+    @Throws(UsernameNotFoundException::class)
+    override fun loadUserByUsername(username: String): UserDetails {
+        val userAuth: org.springframework.security.core.userdetails.User
+        val user: User = userRepository.findByEmail(username).orElse(null)
+            ?: return org.springframework.security.core.userdetails.User(
+                "", "", true, true, true, true,
+                getAuthorities(Arrays.asList(
+                    roleRepository.findByName("ROLE_USER").get())))
+
+        userAuth = org.springframework.security.core.userdetails.User(
+            user.email, user.password, user.enabled, true, true,
+            true, getAuthorities(user.roleList!!.toMutableList()))
+
+        return userAuth
+    }
+
+    private fun getAuthorities(
+        roles: MutableList<Role>,
+    ): Collection<GrantedAuthority?> {
+        return getGrantedAuthorities(getPrivileges(roles))
+    }
+
+    private fun getPrivileges(roles: MutableList<Role>?): List<String> {
+        val privileges: MutableList<String> = ArrayList()
+        val collection: MutableList<Privilege> = ArrayList()
+        if (roles != null) {
+            for (role in roles) {
+                collection.addAll(role.privilegeList)
+            }
+        }
+        for (item in collection) {
+            privileges.add(item.name)
+        }
+        return privileges
+    }
+
+    private fun getGrantedAuthorities(privileges: List<String>): List<GrantedAuthority?> {
+        val authorities: MutableList<GrantedAuthority?> = ArrayList()
+        for (privilege in privileges) {
+            authorities.add(SimpleGrantedAuthority(privilege))
+        }
+        return authorities
+    }
+
+}
