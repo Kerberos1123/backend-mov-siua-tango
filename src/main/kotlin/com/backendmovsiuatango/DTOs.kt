@@ -123,7 +123,7 @@ data class RequestStateDetails(
 data class RequestInput(
     var id: Long? = null,
     var asset: AssetDetails? = null,
-   // var classroom: ClassroomDetails? = null,
+    var classroom: ClassroomResult? = null,
     var user: UserResult? = null,
     var dateHour: Date? = null,
     @JsonFormat(pattern="dd/MM/yyyy")
@@ -133,8 +133,55 @@ data class RequestInput(
 data class RequestResult(
     var id: Long,
     var asset: AssetDetails,
-    // var classroom: ClassroomDetails,
+    var classroom: ClassroomResult,
     var user: UserResult,
     var dateHour: Date,
     var state:RequestStateDetails,
+)
+
+//-----------------------------------------------------DTOs Jonathan
+data class ClassInput(
+        var id: Long? = null,
+        var name: String? = null,
+        var teacher: UserResult? = null,
+        var classroom: ClassroomResult? = null,
+)
+
+data class ClassResult(
+        var id: Long,
+        var name: String,
+        var teacher: UserResult,
+        var classroom: ClassroomResult,
+)
+
+data class ClassroomInput(
+        var id: Long? = null,
+        var name: String? = null,
+        var state: ClassroomStateDetails? = null,
+)
+
+data class ClassroomResult(
+        var id: Long,
+        var name: String,
+        var state: ClassroomStateDetails,
+        var createDate: Date,
+)
+
+data class ClassroomStateDetails(
+        var id:Long?=null,
+        var name:String?=null,
+)
+
+data class DayInput(
+        var id: Long? = null,
+        var day: Int? = null,
+        var startTime: String? = null,
+        var finishTime: String? = null,
+)
+
+data class DayResult(
+        var id: Long,
+        var day: Int,
+        var startTime: String,
+        var finishTime: String,
 )
