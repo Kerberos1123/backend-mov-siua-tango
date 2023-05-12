@@ -43,15 +43,8 @@ interface RoleMapper {
     ): Set<RoleDetails>
 }
 
-
-
-/*
-
 //------------------------------------mappers nacho
-@Mapper(
-    imports = [LocalDateTime::class],
-    componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE
-)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 interface TicketMapper{
     fun ticketToTicketResult(
         ticket:Ticket,
@@ -61,10 +54,10 @@ interface TicketMapper{
         ticketList: List<Ticket>,
     ): List<TicketResult>
 
-    @Mapping(target = "createDate", defaultExpression = "java(new java.util.Date())")
-    fun ticketInputToTicket(
+
+   /* fun ticketInputToTicket(
         ticketInput: TicketInput,
-    ): Ticket
+    ): Ticket*/
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     fun ticketInputToTicket(dto: TicketInput, @MappingTarget ticket: Ticket)
@@ -73,8 +66,12 @@ interface TicketMapper{
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 interface TicketReasonMapper {
-    fun reasonListToReasonDetailsList(
-        reasonList: Set<TicketReason>?,
+    fun ticketReasonToTicketReasonDetails(
+        ticketReason: TicketReason,
+    ): TicketReasonDetails
+
+    fun ticketReasonListToTicketReasonDetailsList(
+        ticketReasonList: Set<TicketReason>?,
     ): Set<TicketReasonDetails>
 }
 
@@ -83,20 +80,32 @@ interface AssetMapper {
     fun assetListToAssetDetailsList(
         assetList: Set<Asset>?,
     ): Set<AssetDetails>
+
+    fun assetToAssetDetails(
+        asset: Asset,
+    ): AssetDetails
 }
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 interface AssetTypeMapper {
-    fun typeListToTypeDetailsList(
-        typeList: Set<AssetType>?,
+    fun assetTypeListToAssetTypeDetailsList(
+        assetTypeList: Set<AssetType>?,
     ): Set<AssetTypeDetails>
+
+    fun typeToTypeDetails(
+        assetType: AssetType,
+    ): PriorityDetails
 }
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 interface RequestStateMapper {
-    fun stateListToStateDetailsList(
-        stateList: Set<RequestState>?,
+    fun requestStateListToRequestStateDetailsList(
+        requestStateList: Set<RequestState>?,
     ): Set<RequestStateDetails>
+
+    fun requestStateToRequestStateDetails(
+        requestState: RequestState,
+    ): RequestStateDetails
 }
 
 @Mapper(
@@ -112,7 +121,7 @@ interface RequestMapper{
         requestList: List<Request>,
     ): List<RequestResult>
 
-    @Mapping(target = "createDate", defaultExpression = "java(new java.util.Date())")
+    @Mapping(target = "date_hour", defaultExpression = "java(new java.util.Date())")
     fun requestInputToRequest(
         requestInput: RequestInput,
     ): Request
@@ -122,4 +131,3 @@ interface RequestMapper{
 
 }
 
-*/
