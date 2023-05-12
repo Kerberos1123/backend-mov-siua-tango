@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
+import kotlin.NoSuchElementException
 
 interface PriorityService {
 
@@ -194,4 +195,58 @@ class AppUserDetailsService(
         return authorities
     }
 
+}
+
+interface RequestService{
+    fun findAll():List<RequestResult>?
+
+    fun findById(id: Long): RequestResult?
+
+    fun create(requestInput: RequestInput):RequestResult?
+
+    fun update(requestInput: RequestInput):RequestResult?
+
+    fun deleteById(id:Long)
+}
+
+@Service
+class AbstractRequestService(
+    @Autowired
+    val requestRepository: RequestRepository,
+
+    @Autowired
+    val userRepository: UserRepository,
+
+    @Autowired
+    val classRepository: ClassRepository,
+
+    val stateRepository: StateRepository,
+
+    @Autowired
+    val requestMapper: RequestMapper,
+):RequestService{
+    override fun findAll(): List<RequestResult>? {
+        return requestMapper.requestListToRequestListResult(
+            requestRepository.findAll()
+        )
+    }
+
+    @kotlin.jvm.Throws
+    override fun findById(id: Long): RequestResult? {
+        val request:Request = requestRepository.findById(id).orElse(null)
+            ?:throw NoSuchElementException(String.format("The Request with the id: %s not found!",id))
+        return requestMapper.requestToRequestResult(request)
+    }
+
+    override fun create(requestInput: RequestInput): RequestResult? {
+        TODO("Not yet implemented")
+    }
+
+    override fun update(requestInput: RequestInput): RequestResult? {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteById(id: Long) {
+        TODO("Not yet implemented")
+    }
 }

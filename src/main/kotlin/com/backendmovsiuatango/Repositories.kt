@@ -31,3 +31,9 @@ interface ClassRepository: JpaRepository<Class, Long>
 
 @Repository
 interface TicketRepository: JpaRepository<Ticket,Long>
+
+@Repository
+interface RequestRepository: JpaRepository<Request,Long>
+
+@Repository
+interface StateRepository: JpaRepository<RequestState,Long>
