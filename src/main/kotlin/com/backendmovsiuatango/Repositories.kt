@@ -36,4 +36,6 @@ interface TicketRepository: JpaRepository<Ticket,Long>
 interface RequestRepository: JpaRepository<Request,Long>
 
 @Repository
-interface StateRepository: JpaRepository<RequestState,Long>
+interface StateRepository: JpaRepository<RequestState,Long>{
+    fun findByName(@Param("name")name : String) : Optional<RequestState>
+}

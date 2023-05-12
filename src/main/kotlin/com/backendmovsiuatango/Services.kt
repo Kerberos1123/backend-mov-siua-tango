@@ -204,8 +204,6 @@ interface RequestService{
 
     fun create(requestInput: RequestInput):RequestResult?
 
-    fun update(requestInput: RequestInput):RequestResult?
-
     fun deleteById(id:Long)
 }
 
@@ -231,7 +229,7 @@ class AbstractRequestService(
         )
     }
 
-    @kotlin.jvm.Throws
+    @Throws(NoSuchElementException::class)
     override fun findById(id: Long): RequestResult? {
         val request:Request = requestRepository.findById(id).orElse(null)
             ?:throw NoSuchElementException(String.format("The Request with the id: %s not found!",id))
@@ -239,14 +237,29 @@ class AbstractRequestService(
     }
 
     override fun create(requestInput: RequestInput): RequestResult? {
-        TODO("Not yet implemented")
+        val request: Request = requestMapper.requestInputToRequest(requestInput)
+        if(request.user == null){
+            val user = userRepository.findByEmail(LoggedUser.get()).orElse(null)
+            request.user = user
+        }
+        if(request.state == null){
+            val state = stateRepository.findByName("Pending").orElse(null)
+            request.state = state
+        }
+        //hacer la relacion de classroom y request en las entities
+       /* if(request.classroom == null){
+            val classroom = classRepository.findById(id).orElse(null)
+            request.classrom = classroom
+        }*/
+        return requestMapper.requestToRequestResult(
+            requestRepository.save(request)
+        )
     }
 
-    override fun update(requestInput: RequestInput): RequestResult? {
-        TODO("Not yet implemented")
-    }
-
+    @Throws(NoSuchElementException::class)
     override fun deleteById(id: Long) {
-        TODO("Not yet implemented")
+        requestRepository.findById(id).orElse(null)
+            ?: throw NoSuchElementException(String.format("The Request with the id: %s not found!", id))
+        requestRepository.deleteById(id)
     }
 }
