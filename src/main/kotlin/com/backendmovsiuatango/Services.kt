@@ -309,7 +309,9 @@ class AbstractTicketService(
             ticket.assetType = assetType
         }
 
-        return ticketMapper.save(ticket)
+        return ticketMapper.ticketToTicketResult(
+            ticketRepository.save(ticket)
+        )
     }
 
     override fun findById(id: Long): TicketResult? {
