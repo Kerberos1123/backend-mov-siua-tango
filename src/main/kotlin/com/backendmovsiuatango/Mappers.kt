@@ -55,15 +55,15 @@ interface TicketMapper{
     ): List<TicketResult>
 
 
-   /* fun ticketInputToTicket(
+   fun ticketInputToTicket(
         ticketInput: TicketInput,
-    ): Ticket*/
+    ): Ticket
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     fun ticketInputToTicket(dto: TicketInput, @MappingTarget ticket: Ticket)
 
 }
-
+/*
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 interface TicketReasonMapper {
     fun ticketReasonToTicketReasonDetails(
@@ -111,7 +111,7 @@ interface RequestStateMapper {
 @Mapper(
     imports = [LocalDateTime::class],
     componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE
-)
+)*/
 interface RequestMapper{
     fun requestToRequestResult(
         request:Request,

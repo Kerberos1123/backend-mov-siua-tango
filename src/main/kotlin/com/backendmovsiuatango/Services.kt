@@ -218,6 +218,7 @@ class AbstractRequestService(
     @Autowired
     val classRepository: ClassRepository,
 
+    @Autowired
     val stateRepository: StateRepository,
 
     @Autowired
@@ -261,5 +262,58 @@ class AbstractRequestService(
         requestRepository.findById(id).orElse(null)
             ?: throw NoSuchElementException(String.format("The Request with the id: %s not found!", id))
         requestRepository.deleteById(id)
+    }
+}
+
+interface TicketService{
+    fun findAll():List<TicketResult>?
+
+    fun findById(id: Long): TicketResult?
+
+    fun create(ticketInput: TicketInput):TicketResult?
+
+    fun deleteById(id:Long)
+}
+
+@Service
+class AbstractTicketService(
+    @Autowired
+    val ticketRepository: TicketRepository,
+
+    @Autowired
+    val userRepository: UserRepository,
+
+    @Autowired
+    val assetTypeRepository: AssetTypeRepository,
+
+    @Autowired
+    val reasonRepository: ReasonRepository,
+
+    @Autowired
+    val ticketMapper: TicketMapper,
+):TicketService{
+    override fun findAll(): List<TicketResult>? {
+        return ticketMapper.ticketListToTicketListResult(
+            ticketRepository.findAll()
+        )
+    }
+
+    override fun create(ticketInput: TicketInput): TicketResult? {
+        val ticket:Ticket = ticketMapper.ticketInputToTicket(ticketInput)
+        if(ticket.user == null){
+            val user = userRepository.findByEmail(LoggedUser.get()).orElse(null)
+            ticket.user = user
+        }
+        if(ticket.assetType == null){
+            val assetType = assetTypeRepository.findByName("Pending")
+        }
+    }
+
+    override fun findById(id: Long): TicketResult? {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteById(id: Long) {
+        TODO("Not yet implemented")
     }
 }

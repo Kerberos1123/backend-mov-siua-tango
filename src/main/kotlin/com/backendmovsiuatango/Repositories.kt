@@ -39,3 +39,11 @@ interface RequestRepository: JpaRepository<Request,Long>
 interface StateRepository: JpaRepository<RequestState,Long>{
     fun findByName(@Param("name")name : String) : Optional<RequestState>
 }
+
+@Repository
+interface ReasonRepository: JpaRepository<TicketReason,Long>
+
+@Repository
+interface AssetTypeRepository: JpaRepository<AssetType,Long>{
+    fun findByName(@Param("name")name : String) : Optional<RequestState>
+}
