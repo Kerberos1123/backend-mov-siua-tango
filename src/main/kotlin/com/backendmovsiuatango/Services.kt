@@ -305,8 +305,11 @@ class AbstractTicketService(
             ticket.user = user
         }
         if(ticket.assetType == null){
-            val assetType = assetTypeRepository.findByName("Pending")
+            val assetType = assetTypeRepository.findByName("Pending").orElse(null)
+            ticket.assetType = assetType
         }
+
+        return ticketMapper.save(ticket)
     }
 
     override fun findById(id: Long): TicketResult? {
@@ -317,3 +320,68 @@ class AbstractTicketService(
         TODO("Not yet implemented")
     }
 }
+
+//----------------------------Services Jonathan-----------
+        /*
+interface ClassService {
+
+    fun findAll(): List<ClassResult>?
+
+    fun findById(id: Long): ClassResult?
+}
+
+@Service
+class AbstractClassService(
+        @Autowired
+        val classRepository: ClassRepository,
+
+        @Autowired
+        val classMapper: ClassMapper,
+
+        ) : ClassService {
+
+    override fun findAll(): List<ClassResult>? {
+        return classMapper.classListToClassListResult(
+                classRepository.findAll()
+        )
+    }
+
+    @Throws(NoSuchElementException::class)
+    override fun findById(id: Long): ClassResult? {
+        val course: Class = classRepository.findById(id).orElse(null)
+                ?: throw NoSuchElementException(String.format("The Class with the id: %s not found!", id))
+        return classMapper.classToClassResults(course)
+    }
+}
+
+
+interface ClassroomService {
+
+    fun findAll(): List<ClassroomResult>?
+
+    fun findById(id: Long): ClassroomResult?
+}
+
+@Service
+class AbstractClassroomService(
+        @Autowired
+        val classroomRepository: ClassroomRepository,
+
+        @Autowired
+        val classroomMapper: ClassroomMapper,
+
+        ) : ClassroomService {
+
+    override fun findAll(): List<ClassroomResult>? {
+        return classroomMapper.classroomListToClassroomListResult(
+                classroomRepository.findAll()
+        )
+    }
+
+    @Throws(NoSuchElementException::class)
+    override fun findById(id: Long): ClassroomResult? {
+        val course: Classroom = classroomRepository.findById(id).orElse(null)
+                ?: throw NoSuchElementException(String.format("The Classroom with the id: %s not found!", id))
+        return classroomMapper.classroomToClassroomResults(course)
+    }
+}*/

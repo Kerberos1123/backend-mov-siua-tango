@@ -26,8 +26,6 @@ interface UserRepository : JpaRepository<User, Long> {
 interface StatusRepository : JpaRepository<Status, Long> {
     fun findByLabel(@Param("label") label : String) : Optional<Status>
 }
-@Repository
-interface ClassRepository: JpaRepository<Class, Long>
 
 @Repository
 interface TicketRepository: JpaRepository<Ticket,Long>
@@ -44,6 +42,11 @@ interface StateRepository: JpaRepository<RequestState,Long>{
 interface ReasonRepository: JpaRepository<TicketReason,Long>
 
 @Repository
-interface AssetTypeRepository: JpaRepository<AssetType,Long>{
-    fun findByName(@Param("name")name : String) : Optional<RequestState>
+interface AssetTypeRepository: JpaRepository<AssetType,Long> {
+    fun findByName(@Param("name") name: String): Optional<AssetType>
 }
+    @Repository
+interface ClassRepository: JpaRepository<Class, Long>
+
+@Repository
+interface ClassroomRepository: JpaRepository<Classroom, Long>
