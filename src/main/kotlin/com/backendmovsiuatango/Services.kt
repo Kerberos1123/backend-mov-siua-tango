@@ -216,9 +216,6 @@ class AbstractRequestService(
     val userRepository: UserRepository,
 
     @Autowired
-    val classRepository: ClassRepository,
-
-    @Autowired
     val stateRepository: StateRepository,
 
     @Autowired
@@ -247,11 +244,7 @@ class AbstractRequestService(
             val state = stateRepository.findByName("Pending").orElse(null)
             request.state = state
         }
-        //hacer la relacion de classroom y request en las entities
-       /* if(request.classroom == null){
-            val classroom = classRepository.findById(id).orElse(null)
-            request.classrom = classroom
-        }*/
+
         return requestMapper.requestToRequestResult(
             requestRepository.save(request)
         )
@@ -284,12 +277,6 @@ class AbstractTicketService(
     val userRepository: UserRepository,
 
     @Autowired
-    val assetTypeRepository: AssetTypeRepository,
-
-    @Autowired
-    val reasonRepository: ReasonRepository,
-
-    @Autowired
     val ticketMapper: TicketMapper,
 ):TicketService{
     override fun findAll(): List<TicketResult>? {
@@ -304,22 +291,24 @@ class AbstractTicketService(
             val user = userRepository.findByEmail(LoggedUser.get()).orElse(null)
             ticket.user = user
         }
-        if(ticket.assetType == null){
-            val assetType = assetTypeRepository.findByName("Pending").orElse(null)
-            ticket.assetType = assetType
-        }
 
         return ticketMapper.ticketToTicketResult(
             ticketRepository.save(ticket)
         )
     }
 
+    @Throws(NoSuchElementException::class)
     override fun findById(id: Long): TicketResult? {
-        TODO("Not yet implemented")
+        val ticket: Ticket = ticketRepository.findById(id).orElse(null)
+            ?: throw NoSuchElementException(String.format("The Ticket with the id: %s not found!", id))
+        return ticketMapper.ticketToTicketResult(ticket)
     }
-
+    @Throws(NoSuchElementException::class)
     override fun deleteById(id: Long) {
-        TODO("Not yet implemented")
+        ticketRepository.findById(id).orElse(null)
+            ?: throw NoSuchElementException(String.format("The Ticket with the id: %s not found!", id))
+
+        ticketRepository.deleteById(id)
     }
 }
 
