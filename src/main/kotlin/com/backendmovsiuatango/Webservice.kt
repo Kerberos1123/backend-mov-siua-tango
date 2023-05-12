@@ -7,19 +7,12 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("\${url.priorities}")
 class PriorityController(private val priorityService: PriorityService){
 
-    /**
-     * WS to find all elements of type Priority
-     * @return A list of elements of type Priority
-     */
+
     @GetMapping
     @ResponseBody
     fun findAll() = priorityService.findAll()
 
-    /**
-     * WS to find one Priority by the id
-     * @param id to find Priority
-     * @return the Priority found
-     */
+
     @Throws(NoSuchElementException::class)
     @GetMapping("{id}")
     @ResponseBody

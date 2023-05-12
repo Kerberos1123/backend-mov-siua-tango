@@ -88,8 +88,7 @@ class JwtAuthenticationFilter(authenticationManager: AuthenticationManager) : Us
     }
 }
 
-class JwtAuthorizationFilter(authenticationManager: AuthenticationManager) :
-    BasicAuthenticationFilter(authenticationManager) {
+class JwtAuthorizationFilter(authenticationManager: AuthenticationManager) : BasicAuthenticationFilter(authenticationManager) {
 
     @Throws(IOException::class)
     override fun doFilterInternal(
@@ -118,9 +117,6 @@ class JwtAuthorizationFilter(authenticationManager: AuthenticationManager) :
 
 }
 
-/**
- * Object to holder the user information
- */
 object LoggedUser {
     private val userHolder = ThreadLocal<String>()
     fun logIn(user: String) {
