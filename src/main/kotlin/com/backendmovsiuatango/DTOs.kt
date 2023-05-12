@@ -145,6 +145,7 @@ data class ClassInput(
         var name: String? = null,
         var teacher: UserResult? = null,
         var classroom: ClassroomResult? = null,
+        var createDate: Date
 )
 
 data class ClassResult(
@@ -152,12 +153,14 @@ data class ClassResult(
         var name: String,
         var teacher: UserResult,
         var classroom: ClassroomResult,
+        var createDate: Date
 )
 
 data class ClassroomInput(
         var id: Long? = null,
         var name: String? = null,
         var state: ClassroomStateDetails? = null,
+        var createDate: Date
 )
 
 data class ClassroomResult(
@@ -177,6 +180,7 @@ data class DayInput(
         var day: Int? = null,
         var startTime: String? = null,
         var finishTime: String? = null,
+        var createDate: Date,
 )
 
 data class DayResult(
@@ -184,4 +188,5 @@ data class DayResult(
         var day: Int,
         var startTime: String,
         var finishTime: String,
+        var createDate: Date,
 )

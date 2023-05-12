@@ -545,6 +545,9 @@ data class Class(
         @Column(name = "id_teacher", insertable = false, updatable = false)
         var idTeacher: Long? = null,
 
+        @Column(name = "create_date")
+        var createDate: Date? = null,
+
         // Entity Relationships
         @OneToOne(cascade = [CascadeType.ALL])
         @JoinColumn(name = "id_classroom")
@@ -591,6 +594,9 @@ data class Classroom(
         @Column(name = "state_id", insertable = false, updatable = false)
         var idState: Long? = null,
 
+        @Column(name = "create_date")
+        var createDate: Date? = null,
+
         // Entity Relationships
         @OneToOne(cascade = [CascadeType.ALL])
         @JoinColumn(name = "state_id", referencedColumnName = "id")
@@ -609,8 +615,12 @@ data class ClassroomState(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
         var id: Long? = null,
+
         @Column(name = "name", insertable = false, updatable = false)
         var stateName: String? = null,
+
+        @Column(name = "create_date")
+        var createDate: Date? = null,
 ){
     // Entity Relationships
 
@@ -632,6 +642,8 @@ data class Day(
         @Column(name = "finish_time")
         var finishTime: String? = null,
 
+        @Column(name = "create_date")
+        var createDate: Date? = null
 
 
 ){

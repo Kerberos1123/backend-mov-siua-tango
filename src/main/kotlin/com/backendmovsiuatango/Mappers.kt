@@ -131,3 +131,68 @@ interface RequestMapper{
 
 }
 
+
+//--------------------------mappers Jonathan
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+interface ClassMapper {
+    fun classToClassResults(
+            course: Class,
+    ): ClassResult
+
+    fun classListToClassListResult(
+            classList: List<Class>,
+    ): List<ClassResult>
+
+    @Mapping(target = "createDate", defaultExpression = "java(new java.util.Date())")
+    fun classInputToClass(
+            classInput: ClassInput,
+    ): Class
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    fun classInputToClass(dto: ClassInput, @MappingTarget course: Class)
+}
+
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+interface ClassroomMapper {
+    fun classroomToClassroomResults(
+            classroom: Classroom,
+    ): ClassroomResult
+
+    fun classroomListToClassroomListResult(
+            classroomList: List<Classroom>,
+    ): List<ClassroomResult>
+
+    @Mapping(target = "createDate", defaultExpression = "java(new java.util.Date())")
+    fun classroomInputToClassroom(
+            classroomInput: ClassroomInput,
+    ): Classroom
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    fun classroomInputToClassroom(dto: ClassroomInput, @MappingTarget classroom: Classroom)
+}
+
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+interface ClassroomStateMapper {
+    fun clStateListToClassroomStateDetailsList(
+            clStateList: Set<ClassroomState>?,
+    ): Set<ClassroomStateDetails>
+}
+
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+interface DayMapper {
+    fun dayToDayResults(
+            day: Day,
+    ): DayResult
+
+    fun dayListToDayListResult(
+            dayList: List<Day>,
+    ): List<DayResult>
+
+    @Mapping(target = "createDate", defaultExpression = "java(new java.util.Date())")
+    fun dayInputToDay(
+            dayInput: DayInput,
+    ): Day
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    fun dayInputToDay(dto: DayInput, @MappingTarget day: Day)
+}
