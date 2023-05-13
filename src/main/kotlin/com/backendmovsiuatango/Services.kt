@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
-import kotlin.NoSuchElementException
 
 interface PriorityService {
 
@@ -43,37 +42,15 @@ class AbstractPriorityService(
 }
 
 interface TaskService {
-    /**
-     * Find all Task
-     * @return a list of Users
-     */
+
     fun findAll(): List<TaskResult>?
 
-    /**
-     * Get one Task by id
-     * @param id of the Task
-     * @return the Task found
-     */
     fun findById(id: Long): TaskResult?
 
-    /**
-     * Save and flush a Task entity in the database
-     * @param taskInput
-     * @return the user created
-     */
     fun create(taskInput: TaskInput): TaskResult?
 
-    /**
-     * Update a Task entity in the database
-     * @param taskInput the dto input for Task
-     * @return the new Task created
-     */
     fun update(taskInput: TaskInput): TaskResult?
 
-    /**
-     * Delete a Task by id from Database
-     * @param id of the Task
-     */
     fun deleteById(id: Long)
 }
 
@@ -197,6 +174,8 @@ class AppUserDetailsService(
 
 }
 
+//----------------------------Services nacho-----------
+
 interface RequestService{
     fun findAll():List<RequestResult>?
 
@@ -313,7 +292,7 @@ class AbstractTicketService(
 }
 
 //----------------------------Services Jonathan-----------
-        /*
+
 interface ClassService {
 
     fun findAll(): List<ClassResult>?
@@ -375,4 +354,4 @@ class AbstractClassroomService(
                 ?: throw NoSuchElementException(String.format("The Classroom with the id: %s not found!", id))
         return classroomMapper.classroomToClassroomResults(course)
     }
-}*/
+}

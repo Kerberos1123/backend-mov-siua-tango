@@ -14,10 +14,7 @@ interface PriorityMapper {
     ): List<PriorityDetails>
 }
 
-@Mapper(
-    imports = [LocalDateTime::class],
-    componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE
-)
+@Mapper(imports = [LocalDateTime::class], componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 interface TaskMapper {
     fun taskToTaskResult(
         task: Task,
@@ -50,6 +47,7 @@ interface TicketMapper{
         ticket:Ticket,
     ):TicketResult
 
+
     fun ticketListToTicketListResult(
         ticketList: List<Ticket>,
     ): List<TicketResult>
@@ -62,8 +60,29 @@ interface TicketMapper{
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     fun ticketInputToTicket(dto: TicketInput, @MappingTarget ticket: Ticket)
 
+
 }
-/*
+
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+interface RequestMapper{
+    fun requestToRequestResult(
+        request:Request,
+    ):RequestResult
+
+    fun requestListToRequestListResult(
+        requestList: List<Request>,
+    ): List<RequestResult>
+
+    @Mapping(target = "dateHour", defaultExpression = "java(new java.util.Date())")
+    fun requestInputToRequest(
+        requestInput: RequestInput,
+    ): Request
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    fun requestInputToRequest(dto: RequestInput, @MappingTarget request: Request)
+
+}
+
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 interface TicketReasonMapper {
     fun ticketReasonToTicketReasonDetails(
@@ -106,29 +125,6 @@ interface RequestStateMapper {
     fun requestStateToRequestStateDetails(
         requestState: RequestState,
     ): RequestStateDetails
-}
-
-@Mapper(
-    imports = [LocalDateTime::class],
-    componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE
-)*/
-interface RequestMapper{
-    fun requestToRequestResult(
-        request:Request,
-    ):RequestResult
-
-    fun requestListToRequestListResult(
-        requestList: List<Request>,
-    ): List<RequestResult>
-
-    @Mapping(target = "date_hour", defaultExpression = "java(new java.util.Date())")
-    fun requestInputToRequest(
-        requestInput: RequestInput,
-    ): Request
-
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    fun requestInputToRequest(dto: RequestInput, @MappingTarget request: Request)
-
 }
 
 

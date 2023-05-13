@@ -38,8 +38,7 @@ interface StateRepository: JpaRepository<RequestState,Long>{
     fun findByName(@Param("name")name : String) : Optional<RequestState>
 }
 
-
-    @Repository
+@Repository
 interface ClassRepository: JpaRepository<Class, Long>
 
 @Repository

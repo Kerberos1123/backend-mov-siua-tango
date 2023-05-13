@@ -2,7 +2,6 @@ package com.backendmovsiuatango
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.util.*
-import javax.persistence.Column
 
 
 data class StatusDetails(
@@ -92,7 +91,7 @@ data class TicketInput(
 
 data class TicketResult(
     var id:Long,
-    var userId: UserResult,
+    var user: UserResult,
     var assetType:AssetTypeDetails,
     var ticketReasons:TicketReasonDetails,
     var detail:String,

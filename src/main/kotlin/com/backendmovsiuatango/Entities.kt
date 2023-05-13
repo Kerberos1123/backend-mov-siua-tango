@@ -446,7 +446,7 @@ data class RequestState(
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null,
     @Column(name = "name", insertable = false, updatable = false)
-    var stateName: String? = null,
+    var name: String? = null,
 
     //Entity relationships
 
@@ -465,7 +465,7 @@ data class RequestState(
     }
 
     override fun toString(): String {
-        return "RequestState(id=$id, name=$stateName)"
+        return "RequestState(id=$id, name=$name)"
     }
 }
 
