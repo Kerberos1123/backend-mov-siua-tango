@@ -32,6 +32,23 @@ interface TaskMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     fun taskInputToTask(dto: TaskInput, @MappingTarget task: Task)
 }
+@Mapper(imports = [LocalDateTime::class], componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+interface UserMapper{
+
+    fun userToUserResult(
+        user:User,
+    ):UserResult
+    fun userListToUserListResult(
+        userList: List<User>,
+    ):List<UserResult>
+
+    fun userInputToUser(
+        userInput: UserInput,
+    ): User
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    fun userInputToUser(dto: UserInput, @MappingTarget user: User)
+}
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 interface RoleMapper {

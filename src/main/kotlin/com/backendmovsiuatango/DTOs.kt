@@ -54,7 +54,7 @@ data class UserInput(
     var email: String? = null,
     var password: String? = null,
     var enabled: Boolean? = null,
-    var roles: List<RoleDetails>? = null,
+    var roleList: List<RoleDetails>? = null,
 )
 
 data class UserLoginInput(
@@ -71,7 +71,7 @@ data class UserResult(
     var enabled: Boolean?,
     var tokenExpired: Boolean?,
     var createDate: Date,
-    var roles: List<RoleDetails>,
+    var roleList: List<RoleDetails>,
 )
 
 data class UserSignUpInput(
@@ -121,7 +121,7 @@ data class RequestStateDetails(
 
 data class RequestInput(
     var id: Long? = null,
-    var asset: AssetDetails? = null,
+    var assets: AssetDetails? = null,
     var classroom: ClassroomResult? = null,
     var user: UserResult? = null,
     var dateHour: Date? = null,
@@ -131,8 +131,8 @@ data class RequestInput(
 
 data class RequestResult(
     var id: Long,
-    var asset: AssetDetails,
-    var classroom: ClassroomResult,
+    var assets: AssetDetails,
+    var classroomId: String,
     var user: UserResult,
     var dateHour: Date,
     var state:RequestStateDetails,
@@ -141,18 +141,18 @@ data class RequestResult(
 //-----------------------------------------------------DTOs Jonathan
 data class ClassInput(
         var id: Long? = null,
-        var name: String? = null,
-        var teacher: UserResult? = null,
-        var classroom: ClassroomResult? = null,
+        var className: String? = null,
+        var classTeacher: UserResult? = null,
+        var classClassroom: ClassroomResult? = null,
         var createDate: Date
 )
 
 data class ClassResult(
-        var id: Long,
-        var name: String,
-        var teacher: UserResult,
-        var classroom: ClassroomResult,
-        var createDate: Date
+    var id: Long,
+    var className: String,
+    var classTeacher: UserResult,
+    var classClassroom: ClassroomResult,
+    var createDate: Date
 )
 
 data class ClassroomInput(
@@ -164,8 +164,8 @@ data class ClassroomInput(
 
 data class ClassroomResult(
         var id: Long,
-        var name: String,
-        var state: ClassroomStateDetails,
+        var classroomName: String,
+        var classroomState: ClassroomStateDetails,
         var createDate: Date,
 )
 

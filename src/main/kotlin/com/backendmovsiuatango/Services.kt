@@ -1,13 +1,12 @@
 package com.backendmovsiuatango
-
+//ESTO ES DE SECURITY
+//import org.springframework.security.core.GrantedAuthority
+//import org.springframework.security.core.authority.SimpleGrantedAuthority
+//import org.springframework.security.core.userdetails.UserDetails
+//import org.springframework.security.core.userdetails.UserDetailsService
+//import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.core.userdetails.UserDetailsService
-import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 interface PriorityService {
@@ -118,6 +117,60 @@ class AbstractTaskService  (
 
 }
 
+interface UserService{
+    fun findAll(): List<UserResult>?
+
+    fun findById(id: Long): UserResult?
+
+
+}
+
+
+@Service
+class AbstarctUserService(
+    @Autowired
+    val userRepository: UserRepository,
+    @Autowired
+    val userMapper: UserMapper
+):UserService{
+    override fun findAll(): List<UserResult>? {
+        return userMapper.userListToUserListResult(
+            userRepository.findAll()
+        )
+    }
+    @Throws(NoSuchElementException::class)
+    override fun findById(id: Long): UserResult? {
+        val user:User = userRepository.findById(id).orElse(null)
+            ?:throw NoSuchElementException(String.format("The User with the id: %s not found!",id))
+        return userMapper.userToUserResult(user)
+    }
+
+    fun create(userInput: UserInput): UserResult? {
+        val user: User = userMapper.userInputToUser(userInput)
+        if (user.tokenExpired == null) {
+            user.tokenExpired = true
+        }
+        return userMapper.userToUserResult(
+            userRepository.save(user)
+        )
+
+    }
+
+    @Throws(NoSuchElementException::class)
+    fun update(userInput: UserInput): UserResult? {
+        val user: User = userRepository.findById(userInput.id!!).orElse(null)
+            ?: throw NoSuchElementException(String.format("The User with the id: %s not found!", userInput.id))
+        var userUpdated: User = user
+        userMapper.userInputToUser(userInput, userUpdated)
+        return userMapper.userToUserResult(userRepository.save(userUpdated))
+    }
+
+}
+
+
+
+/* ESTO ES DE SECURITY
+
 @Service
 @Transactional
 class AppUserDetailsService(
@@ -173,6 +226,8 @@ class AppUserDetailsService(
     }
 
 }
+
+ */
 
 //----------------------------Services nacho-----------
 

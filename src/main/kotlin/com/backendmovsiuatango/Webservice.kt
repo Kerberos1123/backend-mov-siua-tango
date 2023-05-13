@@ -52,11 +52,10 @@ class TaskController(private val taskService: TaskService) {
     }
 }
 
-
-/*
 @RestController
 @RequestMapping("\${url.classes}")
-class ClassController(private val classService: ClassService) {
+class ClassController(private val classService: ClassService){
+
     @GetMapping
     @ResponseBody
     fun findAll() = classService.findAll()
@@ -65,24 +64,31 @@ class ClassController(private val classService: ClassService) {
     @GetMapping("{id}")
     @ResponseBody
     fun findById(@PathVariable id:Long) = classService.findById(id)
+}
 
-    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ResponseBody
-    fun create(@RequestBody classInput: ClassInput) : ClassResult? {
-        return classService.create(classInput)
-    }
+@RestController
+@RequestMapping("\${url.requests}")
+class RequestController(private val requestService: RequestService){
 
-    @Throws(NoSuchElementException::class)
-    @PutMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping
     @ResponseBody
-    fun update(@RequestBody classInput: ClassInput) : ClassResult? {
-        return classService.update(classInput)
-    }
+    fun findAll() = requestService.findAll()
 
     @Throws(NoSuchElementException::class)
-    @DeleteMapping("{id}")
+    @GetMapping("{id}")
     @ResponseBody
-    fun deleteById(@PathVariable id:Long) {
-        classService.deleteById(id)
-    }
-}*/
+    fun findById(@PathVariable id:Long) = requestService.findById(id)
+}
+
+@RestController
+@RequestMapping("\${url.user}")
+class UserController(private val userService: UserService){
+    @GetMapping
+    @ResponseBody
+    fun findAll() = userService.findAll()
+
+    @Throws(NoSuchElementException::class)
+    @GetMapping("{id}")
+    @ResponseBody
+    fun findById(@PathVariable id:Long) = userService.findById(id)
+}

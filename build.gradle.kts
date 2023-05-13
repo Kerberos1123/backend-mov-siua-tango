@@ -25,7 +25,7 @@ dependencies {
 	annotationProcessor ("org.mapstruct:mapstruct:1.5.2.Final")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.7.4")
 	implementation("org.springframework.boot:spring-boot-starter-web:2.7.4")
-	implementation("org.springframework.boot:spring-boot-starter-security:2.7.4")
+	//implementation("org.springframework.boot:spring-boot-starter-security:2.7.4")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.4")
 	implementation("org.jetbrains.kotlin:kotlin-reflect:1.7.20")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.20")
