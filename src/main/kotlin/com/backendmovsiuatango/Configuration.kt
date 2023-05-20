@@ -1,7 +1,6 @@
 package com.backendmovsiuatango
 
-
-/*import com.backendmovsiuatango.AppCustomDsl.Companion.customDsl
+import com.backendmovsiuatango.AppCustomDsl.Companion.customDsl
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -21,7 +20,6 @@ import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import javax.annotation.Resource
-
 
 @Profile("initlocal")
 @Configuration
@@ -126,7 +124,7 @@ class AppCustomDsl : AbstractHttpConfigurer<AppCustomDsl?, HttpSecurity?>() {
         }
     }
 
-}*/*/*/*/
+}
 
 
 

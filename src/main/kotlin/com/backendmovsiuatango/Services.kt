@@ -1,14 +1,14 @@
 package com.backendmovsiuatango
 //ESTO ES DE SECURITY
-//import org.springframework.security.core.GrantedAuthority
-//import org.springframework.security.core.authority.SimpleGrantedAuthority
-//import org.springframework.security.core.userdetails.UserDetails
-//import org.springframework.security.core.userdetails.UserDetailsService
-//import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
-
 interface PriorityService {
 
     fun findAll(): List<PriorityDetails>?
@@ -182,7 +182,7 @@ class AbstarctUserService(
 
 
 
-/* ESTO ES DE SECURITY
+//------------------------------------------------ ESTO ES DE SECURITY
 
 @Service
 @Transactional
@@ -240,7 +240,6 @@ class AppUserDetailsService(
 
 }
 
- */
 
 //----------------------------Services nacho-----------
 
