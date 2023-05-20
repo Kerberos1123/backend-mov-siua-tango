@@ -64,6 +64,26 @@ class ClassController(private val classService: ClassService){
     @GetMapping("{id}")
     @ResponseBody
     fun findById(@PathVariable id:Long) = classService.findById(id)
+
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    fun create(@RequestBody classInput: ClassInput) : ClassResult? {
+        return classService.create(classInput)
+    }
+
+    @Throws(NoSuchElementException::class)
+    @PutMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    fun update(@RequestBody classInput: ClassInput) : ClassResult? {
+        return classService.update(classInput)
+    }
+
+    @Throws(NoSuchElementException::class)
+    @DeleteMapping("{id}")
+    @ResponseBody
+    fun deleteById(@PathVariable id:Long) {
+        classService.deleteById(id)
+    }
 }
 
 @RestController
@@ -78,6 +98,27 @@ class RequestController(private val requestService: RequestService){
     @GetMapping("{id}")
     @ResponseBody
     fun findById(@PathVariable id:Long) = requestService.findById(id)
+
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    fun create(@RequestBody requestInput: RequestInput) : RequestResult? {
+        return requestService.create(requestInput)
+    }
+
+    @Throws(NoSuchElementException::class)
+    @PutMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    fun update(@RequestBody requestInput: RequestInput) : RequestResult? {
+        return requestService.update(requestInput)
+    }
+
+    @Throws(NoSuchElementException::class)
+    @DeleteMapping("{id}")
+    @ResponseBody
+    fun deleteById(@PathVariable id:Long) {
+        requestService.deleteById(id)
+    }
+
 }
 
 @RestController
@@ -91,4 +132,24 @@ class UserController(private val userService: UserService){
     @GetMapping("{id}")
     @ResponseBody
     fun findById(@PathVariable id:Long) = userService.findById(id)
+
+    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    fun create(@RequestBody userInput: UserInput) : UserResult? {
+        return userService.create(userInput)
+    }
+
+    @Throws(NoSuchElementException::class)
+    @PutMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseBody
+    fun update(@RequestBody userInput: UserInput) : UserResult? {
+        return userService.update(userInput)
+    }
+
+    @Throws(NoSuchElementException::class)
+    @DeleteMapping("{id}")
+    @ResponseBody
+    fun deleteById(@PathVariable id:Long) {
+        userService.deleteById(id)
+    }
 }

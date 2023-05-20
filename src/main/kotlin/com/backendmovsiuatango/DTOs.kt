@@ -54,6 +54,7 @@ data class UserInput(
     var email: String? = null,
     var password: String? = null,
     var enabled: Boolean? = null,
+    var createDate: Date? = null,
     var roleList: List<RoleDetails>? = null,
 )
 
@@ -70,8 +71,8 @@ data class UserResult(
     var password: String,
     var enabled: Boolean?,
     var tokenExpired: Boolean?,
-    var createDate: Date,
-    var roleList: List<RoleDetails>,
+    var createDate: Date?,
+    var roleList: List<RoleDetails>?,
 )
 
 data class UserSignUpInput(
@@ -122,17 +123,18 @@ data class RequestStateDetails(
 data class RequestInput(
     var id: Long? = null,
     var assets: AssetDetails? = null,
-    var classroom: ClassroomResult? = null,
+    //var classroom: ClassroomResult? = null,
+    var classroomId: Long? = null,
     var user: UserResult? = null,
-    var dateHour: Date? = null,
     @JsonFormat(pattern="dd/MM/yyyy")
+    var dateHour: Date? = null,
     var state:RequestStateDetails?=null,
 )
 
 data class RequestResult(
     var id: Long,
     var assets: AssetDetails,
-    var classroomId: String,
+    var classroomId: Long,
     var user: UserResult,
     var dateHour: Date,
     var state:RequestStateDetails,
@@ -144,7 +146,7 @@ data class ClassInput(
         var className: String? = null,
         var classTeacher: UserResult? = null,
         var classClassroom: ClassroomResult? = null,
-        var createDate: Date
+        var createDate: Date? = null
 )
 
 data class ClassResult(

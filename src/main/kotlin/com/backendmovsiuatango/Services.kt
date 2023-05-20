@@ -122,7 +122,11 @@ interface UserService{
 
     fun findById(id: Long): UserResult?
 
+    fun create(userInput: UserInput): UserResult?
 
+    fun update(userInput: UserInput): UserResult?
+
+    fun deleteById(id: Long)
 }
 
 
@@ -138,6 +142,7 @@ class AbstarctUserService(
             userRepository.findAll()
         )
     }
+
     @Throws(NoSuchElementException::class)
     override fun findById(id: Long): UserResult? {
         val user:User = userRepository.findById(id).orElse(null)
@@ -145,7 +150,7 @@ class AbstarctUserService(
         return userMapper.userToUserResult(user)
     }
 
-    fun create(userInput: UserInput): UserResult? {
+    override fun create(userInput: UserInput): UserResult? {
         val user: User = userMapper.userInputToUser(userInput)
         if (user.tokenExpired == null) {
             user.tokenExpired = true
@@ -157,12 +162,20 @@ class AbstarctUserService(
     }
 
     @Throws(NoSuchElementException::class)
-    fun update(userInput: UserInput): UserResult? {
+    override fun update(userInput: UserInput): UserResult? {
         val user: User = userRepository.findById(userInput.id!!).orElse(null)
             ?: throw NoSuchElementException(String.format("The User with the id: %s not found!", userInput.id))
         var userUpdated: User = user
         userMapper.userInputToUser(userInput, userUpdated)
         return userMapper.userToUserResult(userRepository.save(userUpdated))
+    }
+
+    @Throws(NoSuchElementException::class)
+    override fun deleteById(id: Long) {
+        userRepository.findById(id).orElse(null)
+            ?: throw NoSuchElementException(String.format("The User with the id: %s not found!", id))
+
+        userRepository.deleteById(id)
     }
 
 }
@@ -238,6 +251,8 @@ interface RequestService{
 
     fun create(requestInput: RequestInput):RequestResult?
 
+    fun update(taskInput: RequestInput): RequestResult?
+
     fun deleteById(id:Long)
 }
 
@@ -282,6 +297,19 @@ class AbstractRequestService(
         return requestMapper.requestToRequestResult(
             requestRepository.save(request)
         )
+    }
+
+    @Throws(NoSuchElementException::class)
+    override fun update(requestInput: RequestInput): RequestResult? {
+        val request: Request = requestRepository.findById(requestInput.id!!).orElse(null)
+
+            ?: throw NoSuchElementException(String.format("The Request with the id: %s not found!", requestInput.id))
+
+        var requestUpdated: Request = request
+
+        requestMapper.requestInputToRequest(requestInput, requestUpdated)
+
+        return requestMapper.requestToRequestResult(requestRepository.save(requestUpdated))
     }
 
     @Throws(NoSuchElementException::class)
@@ -353,12 +381,21 @@ interface ClassService {
     fun findAll(): List<ClassResult>?
 
     fun findById(id: Long): ClassResult?
+
+    fun create(taskInput: ClassInput): ClassResult?
+
+    fun update(taskInput: ClassInput): ClassResult?
+
+    fun deleteById(id: Long)
 }
 
 @Service
 class AbstractClassService(
         @Autowired
         val classRepository: ClassRepository,
+
+        @Autowired
+        val userRepository: UserRepository,
 
         @Autowired
         val classMapper: ClassMapper,
@@ -376,6 +413,39 @@ class AbstractClassService(
         val course: Class = classRepository.findById(id).orElse(null)
                 ?: throw NoSuchElementException(String.format("The Class with the id: %s not found!", id))
         return classMapper.classToClassResults(course)
+    }
+
+    override fun create(classInput: ClassInput): ClassResult? {
+
+        val clase : Class = classMapper.classInputToClass(classInput)
+        /*if (clase.userList == null){
+            val userx = userRepository.findByEmail(LoggedUser.get()).orElse(null) //LoggedUser viene de Security.kt
+
+        }*/
+        return classMapper.classToClassResults(
+            classRepository.save(clase)
+        )
+
+    }
+
+    @Throws(NoSuchElementException::class)
+    override fun update(classInput: ClassInput): ClassResult? {
+        val clase: Class = classRepository.findById(classInput.id!!).orElse(null)
+
+            ?: throw NoSuchElementException(String.format("The Class with the id: %s not found!", classInput.id))
+
+        var classUpdated: Class = clase
+
+        classMapper.classInputToClass(classInput, classUpdated)
+        return classMapper.classToClassResults(classRepository.save(classUpdated))
+    }
+
+    @Throws(NoSuchElementException::class)
+    override fun deleteById(id: Long) {
+        classRepository.findById(id).orElse(null)
+            ?: throw NoSuchElementException(String.format("The Class with the id: %s not found!", id))
+
+        classRepository.deleteById(id)
     }
 }
 

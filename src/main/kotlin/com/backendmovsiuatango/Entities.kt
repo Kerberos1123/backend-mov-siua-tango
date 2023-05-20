@@ -53,7 +53,7 @@ data class Task(
 
     // Entity Relationship
 
-    @ManyToOne
+    @ManyToOne(cascade = [CascadeType.MERGE])
     @JoinColumn(name = "priority_id", nullable = false, referencedColumnName = "id")
     var priority: Priority,
 
@@ -234,6 +234,7 @@ data class User(
     var lastName: String? = null,
     var password: String? = null,
     var email: String? = null,
+    @Temporal(TemporalType.DATE)
     var createDate: Date? = null,
     var enabled: Boolean,
     var tokenExpired: Boolean? = null,
@@ -380,7 +381,7 @@ data class Asset(
     //Entity relationships
 
     //ASSETTYPE DONE
-    @OneToOne(cascade = [CascadeType.ALL])
+    @OneToOne(cascade = [CascadeType.MERGE])
     @JoinColumn(name = "asset_type_id")
     var assetType: AssetType? = null,
 
@@ -485,7 +486,8 @@ data class Request(
     @Column(name = "user_id",  insertable = false, updatable = false)
     var userId: Long? = null,
 
-    @Column(name = "date_hour", insertable = false, updatable = false)
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="dd/MM/yyyy")
     var dateHour: Date? = null,
 
     @Column(name = "state_id", insertable = false, updatable = false)
@@ -498,12 +500,12 @@ data class Request(
     var user: User? = null,
 
     // ASSET
-    @OneToOne(cascade = [CascadeType.ALL])
+    @OneToOne(cascade = [CascadeType.MERGE])
     @JoinColumn(name = "asset_id")
     var assets: Asset,
 
     //REQUESTSTATE
-    @OneToOne(cascade = [CascadeType.ALL])
+    @OneToOne(cascade = [CascadeType.MERGE])
     @JoinColumn(name = "state_id")
     var state: RequestState,
 
@@ -545,15 +547,15 @@ data class Class(
         @Column(name = "id_teacher", insertable = false, updatable = false)
         var idTeacher: Long? = null,
 
-        @Column(name = "create_date")
+        @Temporal(TemporalType.DATE)
         var createDate: Date? = null,
 
         // Entity Relationships
-        @OneToOne(cascade = [CascadeType.ALL])
+        @OneToOne(cascade = [CascadeType.MERGE])
         @JoinColumn(name = "id_classroom")
         var classClassroom: Classroom? = null,
 
-        @OneToOne(cascade = [CascadeType.ALL])
+        @OneToOne(cascade = [CascadeType.MERGE])
         @JoinColumn(name = "id_teacher")
         var classTeacher: User? = null,
 
@@ -563,7 +565,7 @@ data class Class(
                 joinColumns = [JoinColumn(name = "class_id", referencedColumnName = "id")],
                 inverseJoinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")]
         )
-        var userList: Set<User>,
+        var userList: Set<User>? = null,
 
         @ManyToMany
         @JoinTable(
@@ -571,7 +573,7 @@ data class Class(
                 joinColumns = [JoinColumn(name = "class_id", referencedColumnName = "id")],
                 inverseJoinColumns = [JoinColumn(name = "day_id", referencedColumnName = "id")]
         )
-        var daysList: Set<Day>
+        var daysList: Set<Day>? = null
 
 ){
 
@@ -598,7 +600,7 @@ data class Classroom(
         var createDate: Date? = null,
 
         // Entity Relationships
-        @OneToOne(cascade = [CascadeType.ALL])
+        @OneToOne(cascade = [CascadeType.MERGE])
         @JoinColumn(name = "state_id", referencedColumnName = "id")
         var classroomState: ClassroomState? = null,
 
