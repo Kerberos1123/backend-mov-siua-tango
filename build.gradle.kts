@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
 	application
 	id("org.springframework.boot") version "2.7.4"
@@ -12,7 +10,9 @@ plugins {
 
 group = "com.backend-mov-siua-tango"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
+//java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+
 
 repositories {
 	mavenCentral()
@@ -36,12 +36,12 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql:42.5.0")
 }
 
-tasks.withType<KotlinCompile> {
+/*tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
 		jvmTarget = "17"
 	}
-}
+}*/
 
 tasks.withType<Test> {
 	useJUnitPlatform()
