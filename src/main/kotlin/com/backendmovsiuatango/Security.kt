@@ -26,7 +26,7 @@ object SecurityConstants {
     const val TOKEN_PREFIX = "Bearer "
     const val APPLICATION_JSON = "application/json"
     const val UTF_8 = "UTF-8"
-    val TOKEN_SECRET: String = Base64.getEncoder().encodeToString("Mike-Education".toByteArray())
+    val TOKEN_SECRET: String = Base64.getEncoder().encodeToString("WhiteZombie".toByteArray())
 }
 
 class JwtAuthenticationFilter(authenticationManager: AuthenticationManager) : UsernamePasswordAuthenticationFilter() {
@@ -40,8 +40,10 @@ class JwtAuthenticationFilter(authenticationManager: AuthenticationManager) : Us
 
     @Throws(AuthenticationException::class)
     override fun attemptAuthentication(
+
         request: HttpServletRequest,
         response: HttpServletResponse,
+
     ): Authentication {
 
         if (request.method != "POST") {
@@ -63,8 +65,10 @@ class JwtAuthenticationFilter(authenticationManager: AuthenticationManager) : Us
     }
 
     override fun successfulAuthentication(
+
         request: HttpServletRequest, response: HttpServletResponse,
-        filterChain: FilterChain, authentication: Authentication,
+        filterChain: FilterChain, authentication: Authentication
+
     ) {
 
         val objectMapper = ObjectMapper()
