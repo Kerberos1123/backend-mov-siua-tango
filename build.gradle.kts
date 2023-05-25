@@ -12,7 +12,9 @@ plugins {
 
 group = "com.backend-mov-siua-tango"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
+//java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+
 
 repositories {
 	mavenCentral()
@@ -39,7 +41,7 @@ dependencies {
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "17"
+		jvmTarget = "1.8"
 	}
 }
 
