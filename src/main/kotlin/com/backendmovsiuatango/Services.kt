@@ -226,7 +226,7 @@ class AppUserDetailsService(
         val collection: MutableList<Privilege> = ArrayList()
         if (roles != null) {
             for (role in roles) {
-                collection.addAll(role.privilegeList!!)
+                collection.addAll(role.privilegeList)
             }
         }
         for (item in collection) {

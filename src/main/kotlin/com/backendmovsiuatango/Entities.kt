@@ -134,7 +134,7 @@ data class Role(
         joinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")],
         inverseJoinColumns = [JoinColumn(name = "privilege_id", referencedColumnName = "id")]
     )
-    var privilegeList: Set<Privilege>? = null,
+    var privilegeList: Set<Privilege>,
 
 ) {
     override fun equals(other: Any?): Boolean {
